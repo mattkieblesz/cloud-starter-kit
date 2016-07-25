@@ -1,8 +1,8 @@
 # Cloud Starter Kit
 
-The goal of this project is to provide full stack for robust web application development and deployment yet allow to make tech stack changes very easy.
+The goal of this project is to provide full technology stack for robust web application development and deployment and yet allow to make changes easily.
 
-Another intention is to make it interesting, easy to play with and learn. This is desired project features which will be implemented as times goes by.
+Another intention is to make it interesting, easy to play with and learn. This are desired project features which will be implemented in my free time.
 
 **General**
 
@@ -28,8 +28,8 @@ Another intention is to make it interesting, easy to play with and learn. This i
 * search of your choice
 * isomorphic MVC thanks to client framework of your choice
 * queuing infrastructure
-* email service
-* robust caching
+* email server
+* message queuing
 * test first setup
 
 **Development workflow**
@@ -46,7 +46,7 @@ Another intention is to make it interesting, easy to play with and learn. This i
 
 * load balancing
 * relational database clustering and sharding
-* NoSql solutions
+* NoSQL solutions
 
 ## Current tech stack
 
@@ -54,7 +54,6 @@ Another intention is to make it interesting, easy to play with and learn. This i
 
 * Vagrant - create local deployment environments
 * Ansible - provisioning and deployment tool written in Python
-<!-- * Jenkins - continuous integration tool -->
 
 **Backend**
 
@@ -66,7 +65,7 @@ Another intention is to make it interesting, easy to play with and learn. This i
 **Backend development**
 
 * Fabric - Python task and deployment automation tool
-* djagno-debug-toolbar - debug API
+* djagno-debug-toolbar - API debug tools
 
 **Frontend**
 
@@ -116,4 +115,4 @@ Before submitting pull request please follow guide on how to [contribute](CONTRI
 
 ## Thank you
 
-I'm looking at many starter kits during development of this project and many chunks were implemented here. Here is a list you might want to look at and use if you don't like this implementation.
+I'm looking at many starter kits during development of this project and many chunks were implemented here. Here is a list you might want to look at and use if you don't like this implementation.t and use if you don't like this implementation.
