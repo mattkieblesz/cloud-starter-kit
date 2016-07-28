@@ -1,0 +1,38 @@
+{
+    "name": "web-api-drf",
+    // dependencies which don't need injected configuration - it's one
+    // way communications. Dependencies of dependency
+    "dependencies": {
+        // base dependencies are not needed, because they will be set up
+        // in deployment tools used
+        // "base": ["java"],
+        "proxy-server": ["nginx"],
+    },
+
+    // dependencies act as services to current component, hence change in
+    // any of them needs needs to reciprocate change in component settings.
+    // This means that component needs to have good place to store settings
+    // for each of it's dependencies
+    "injectedDependencies": {
+        "controller": ["ansible"],
+        "storage-sql": ["postgresql"],
+    },
+
+    // each component must be testable via user interaction - results of it's
+    // use needs to be visible to user in browser hence basic requirement of
+    // any component is to support any client
+    "featureClients": ["client--react", "mvc-angular"],
+    "supportedContainers": {
+        "web-app": ["express"],
+    },
+
+    "supportedEnvironemnts": ["dev", "stage", "prod"],
+    "supportedRepresentations": {
+        "single": true, "multi": true, "master-to-node": false, "multipli"},
+    "requiredSettings": [],
+    // additional dependencies to make component testable out of the box
+    // with user interaction on the client via browser. All supported
+    // versions are here
+    "local-ports": ["8000"],
+    "remote-ports": ["8080"],
+}

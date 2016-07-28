@@ -1,0 +1,17 @@
+{
+    "resources": {
+        "web": {
+            "public_ip": "",
+            "private_ip": "",
+            "subnet_id": "",
+            "vpc_id": "",
+            "vagrant_box": "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box",
+            "containers": {
+                "web-api-drf": {
+
+                },
+
+            }
+        }
+    }
+}
