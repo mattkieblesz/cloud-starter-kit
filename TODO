@@ -1,0 +1,167 @@
+- terraform create/destroy remote bucket for storing images.
+- packer create ami/docker/vagrant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Starter-kit UI pages:
+- requirements:
+    - build deploy
+    - code deploy
+    - best coding practices
+    - all services tested
+- functionalities:
+    - haproxy (mkitdevelopment.com is point to micro aws instance with haproxy in it)
+    - tinder with scraped products using celery workers and rabitmq with websockets and jquery and react native view for android and iOS (scraping job log on displayed on the page)
+    - self hosted osm with leaflet
+    - python social auth (facebook/twitter/google)
+    - change color of navigation bar (using semantic-ui and recompiling with django forms)
+    - machine learning benchmark (linear regression)
+    - payments with paymill pro
+    - using elasticsearch/sorl search with react
+    - login page with angular2
+    - performance test by clicking a button (setup simple infra and with small instance run script)
+    - godbox
+    - fake https
+    - create server on demand and destroy 5 minutes after creation (with timer)
+- languages (hello world):
+    - python
+    - ruby
+    - scala
+    - go
+    - clojure
+    - nodejs
+    - PL-SQL
+    - Erlang
+    - haskel
+    - Perl
+    - php
+    - java
+    - c
+    - c++
+    - c#
+    - lua
+    - bash
+    - assembley
+    - matlab
+    - Visual Basic .NET
+    - pascal
+    - Rust
+    - CSS
+    - Sass
+    - less
+    - javascript
+    - XML
+    - JSON
+- software (default usecase):
+    - supervisor
+    - hadoop
+    - HBase
+    - spark
+    - hive
+    - cassandra
+    - docker
+    - postgresql
+    - postgis
+    - mysql
+    - redis
+    - memcache
+    - mongo
+    - jenkins
+    - gocd
+    - elk
+    - sentry
+    - elasticsearch
+    - solr
+    - openstack
+    - RabbitMQ
+    - Kubernetes
+    - Kafka
+    - Oozie
+    - ZooKeeper
+    - Tomcat
+    - nginx
+    - gunicorn
+    - uwsgi
+    - vagrant
+    - Datadog
+    - WordPress
+    - apache2
+    - Neo4j
+    - graphana
+    - vmware
+    - haproxy
+    - kitchenci
+    - postfix
+    - gitlab enterprise
+    - trac
+- provisioners:
+    - ansible
+    - puppet
+    - chef
+    - Saltstack
+- testing (test log with websockets):
+    - integration (services endpoints with unittests)
+    - acceptance (payments)
+    - unittests (pytest and unittest)
+    - infrasctructure (with kitchenci possibly)
+- libs (simplest hello world app):
+    - flask
+    - django
+    - rubyonrails
+    - cherrypy
+    - react
+    - angular2
+    - fabric
+    - boto
+    - numpy/scipy/pandas
+    - Jupyter
+    - Kerberos
+    - LDAP
+    - pySpark
+    - semantic-ui
+    - celery
+    - Bootstrap
+    - react-native
+- providers:
+    - aws (ec2)
+    - ovh (scaleway)
+    - azure
