@@ -1,6 +1,8 @@
-- terraform create/destroy remote bucket for storing images.
-- packer create ami/docker/vagrant.
-
+- create service's vagrant file, provision with ansible and run it
+- packer create ami/docker/vagrant and save locally
+- packer create ami/docker/vagrant and save remotelly
+- run docker/vagrant locally from local image
+- run docker/vagrant locally from remote image
 
 
 

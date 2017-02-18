@@ -34,6 +34,7 @@ main() {
 
     inf "--> Creating remote store s3 bucket"
     /usr/local/bin/aws s3 mb s3://$STORE_BUCKET_NAME
+
     inf "--> Sync everything which is in the local store with remote"
     /usr/local/bin/aws s3 cp $BASE_DIR/store/ s3://$STORE_BUCKET_NAME/ --recursive --exclude "README.md"
 }

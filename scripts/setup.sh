@@ -8,6 +8,10 @@ readonly TERRAFORM_VERSION="0.8.6"
 readonly TERRAFORM_DOWNLOAD_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
 readonly PACKER_VERSION="0.12.2"
 readonly PACKER_DOWNLOAD_URL="https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
+readonly VAGRANT_VERSION="1.9.1"
+readonly VAGRANT_DOWNLOAD_URL="https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb"
+readonly DOCKER_VERSION="1.13.1"
+readonly DOCKER_DOWLOAD_URL="https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_${DOCKER_VERSION}-0~ubuntu-trusty_amd64.deb"
 
 source "$SCRIPT_DIR/utils.sh"
 
@@ -54,6 +58,16 @@ prerequisites() {
     fi
 }
 
+install_deb() {
+    inf "--> Downloading $1 deb package"
+    curl -o "$1" "$2"
+
+    inf "--> Installing deb package"
+    dpkg -i "$1"
+
+    rm "$1"
+}
+
 install_binary() {
     inf "--> Downloading $1 binary"
     curl -o "$1" "$2"
@@ -71,6 +85,7 @@ main() {
     prerequisites
 
     inf "--> Installing core requirements"
+    apt-get update
     apt-get install build-essential python-dev python-pip python3-pip
 
     inf "--> Installing Terraform"
@@ -84,7 +99,20 @@ main() {
 
     inf "--> Installing awscli"
     # ignore six if installed https://github.com/aws/aws-cli/issues/1522#issuecomment-159007931
-    sudo -H pip install awscli==1.11.47 --upgrade --ignore-installed six
+    pip install awscli==1.11.47 --upgrade --ignore-installed six
+
+    inf "--> Installing Vagrant"
+    install_deb "$DOWNLOAD_DIR/vagrant.deb" $VAGRANT_DOWNLOAD_URL
+
+    inf "--> Installing Docker"
+    # https://docs.docker.com/engine/installation/linux/ubuntu/#install-from-a-package
+    apt-get install --no-install-recommends linux-image-extra-$(uname -r) linux-image-extra-virtual
+    install_deb "$DOWNLOAD_DIR/docker.deb" $DOCKER_DOWLOAD_URL
+
+    inf "--> Enable Docker to be run by current user"
+    # # https://docs.docker.com/engine/installation/linux/linux-postinstall/
+    getent group docker || groupadd docker
+    usermod -aG docker $USER
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main
