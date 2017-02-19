@@ -2,27 +2,23 @@
 
 # configure credentials
 configure:
-	./scripts/configure.sh
+	./scripts/local/configure.sh
 
 # setup devops toolset on current machine
 setup:
-	./scripts/setup.sh
+	./scripts/local/setup.sh
 
 # update ansible vendor roles
 update-roles:
-	./scripts/update_roles.sh
+	./scripts/local/update_roles.sh
 
 # creates new role
-create-role:
-	./scripts/create_role.sh
-
-# creates new env
-create-env:
-	./scripts/create_env.sh
+create-service:
+	./scripts/local/create_service.sh
 
 # mgt tool to build images
 build:
-	./scripts/build_image.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
+	./scripts/management/build_image.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
 
 # mgt tool to run test suite
 test:
@@ -38,6 +34,10 @@ destroy:
 
 # mgt tool to provision to already created infrastructure
 provision:
+	echo "--> pass"
+
+# mgt tool to backup data
+backup:
 	echo "--> pass"
 
 # mgt tool to provision specific task to already created infrastructure like collectstatic in remote, deploy code, migrate ...

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 readonly INSTALL_DIR="/usr/local/bin"
 readonly DOWNLOAD_DIR="/tmp"
 
@@ -101,9 +101,6 @@ main() {
     # ignore six if installed https://github.com/aws/aws-cli/issues/1522#issuecomment-159007931
     pip install awscli==1.11.47 --upgrade --ignore-installed six
 
-    inf "--> Installing Vagrant"
-    install_deb "$DOWNLOAD_DIR/vagrant.deb" $VAGRANT_DOWNLOAD_URL
-
     inf "--> Installing Docker"
     # https://docs.docker.com/engine/installation/linux/ubuntu/#install-from-a-package
     apt-get install --no-install-recommends linux-image-extra-$(uname -r) linux-image-extra-virtual
@@ -113,6 +110,9 @@ main() {
     # # https://docs.docker.com/engine/installation/linux/linux-postinstall/
     getent group docker || groupadd docker
     usermod -aG docker $USER
+
+    inf "--> Installing Vagrant"
+    install_deb "$DOWNLOAD_DIR/vagrant.deb" $VAGRANT_DOWNLOAD_URL
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main

@@ -1,5 +1,4 @@
----
-all:
+apt:
   ## Deploy Apt source custom template
   apt_update_source_list: "template"
   ## use netherland mirror

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 readonly BASE_DIR=$( cd $SCRIPT_DIR/.. && pwd )
 
 readonly AWS_CONFIG_DIR="$HOME/.aws"

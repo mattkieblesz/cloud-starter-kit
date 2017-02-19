@@ -1,0 +1,7 @@
+---
+
+- name: Build Web instance
+  hosts: "{{ hosts }}"
+
+  roles:
+    - role: web

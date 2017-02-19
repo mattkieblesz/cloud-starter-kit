@@ -22,29 +22,6 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
       ssh_keys/                 # list of ssh keys
         id_username.pub
 
-    group_vars/                 # for default role setup
-      all/                      # variables under this directory belongs all the groups
-        role1.yml               # role1 variable file for all groups
-        role2.yml               # role2 variable file for all groups
-      play1/                    # here we assign variables to play1 groups
-        role1.yml               # Each file will correspond to a role i.e. role1.yml
-        role2.yml               # --||--
-      play2/                    # here we assign variables to play2 groups
-        role3.yml               # Each file will correspond to a role i.e. role3.yml
-        role4.yml               # --||--
-      testplay/                 # here we assign variables to testplay groups
-        role5.yml               # Each file will correspond to a role i.e. role5.yml
-        role6.yml               # --||--
-      performancetestplay/      # here we assign variables to performancetestplay groups
-        role7.yml               # Each file will correspond to a role i.e. role7.yml
-        role8.yml               # --||--
-      jenkinsplay/              # here we assign variables to jenkinsplay groups
-        role9.yml               # Each file will correspond to a role i.e. role9.yml
-        role10.yml              # --||--
-      gocdplay/                 # here we assign variables to gocdplay groups
-        role11.yml              # Each file will correspond to a role i.e. role11.yml
-        role12.yml              # --||--
-
     plays/
       play1.yml                 # playbooks should have just services roles dependencies
       play2.yml                 # --||--
@@ -52,6 +29,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
       jenkinsplay.yml           # --||--
       gocdplay.yml              # --||--
       testplay.yml              # --||--
+      dataplay.yml              # --||--
 
     roles/
       services/                 # All the roles that are specific to a service
@@ -86,13 +64,15 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
       requirements.yml          # All the information about external roles
 
     envs/                       # Main entry point to infrastructure setup
+      local/
+        vars.yml
+        secrets-plain.yml
+        secrets.yml
+
       dev/
-        vars/                   # Folder with vars specific to environment (simple flat file structure)
-          all.yml
-          play1.yml
-          play2.yml
-          secret-plain.yml      # Secret file template (not used)
-          secrets.yml           # One file with secrets for environment
+        vars.yml                # File with all vars to services
+        secrets-plain.yml       # Secret file template (not used)
+        secrets.yml             # One file with secrets for environment
         inventory.ini           # Dynamic inventory file which includes location
         terraform.tf            # Environment infra as code setup
       stg
@@ -108,10 +88,20 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         ...
 
     scripts/                    # utility scripts used by Makefile targets
-      setup.sh                  # setup devops script
-      update_roles.sh           # update vendor roles
-      create_role.sh            # create new common/service role
-      create_env.sh             # create new environment
+      files/                    # not script files used in scripts
+        role_requirements.yml   # vendor requirements
+      local/                    # for repo usage/configuration
+        setup.sh                # setup system requirements for using this repo
+        configure.sh            # configure credentials to infra provider and createing remote store
+        update_roles.sh         # update vendor roles
+        create_service.sh       # create new service role
+      backup.sh                 # backup datastores
+      build_image.sh            # create service image
+      create.sh                 # create resource from specified image
+      deploy.sh                 # deploy service with provisioning or by create new resource in pararell and tearing down currently used
+      provision_tag.sh          # perform certain tasks against service
+      provision.sh              # provision playbook
+      test.sh                   # perform all tests including infrastructure tests
 
     store/                      # local storage directory which has same structure as remote store (s3 bucket)
       dev/backups/              # backups/snapshots etc.
