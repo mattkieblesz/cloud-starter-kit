@@ -1,12 +1,35 @@
-- packer create ami using docker/aws and save locally
-- packer create ami/docker/vagrant using docker/amazon/virtualbox and save remotelly
+- create temp folder for vagrant/docker/packer templates
+- create dns config file in yml format with public and private domains
+- create Vagrantfile for web from template and run it
+- create Vagrantfile for db and web at the same time and run them
+- create Packer template for web/db from template and AWS AMI machine using AWS/docker/vagrant/, compress it and save in local/remote store
+- use same packer template to create docker image for web/db
+- use same packer template to create vagrant image for web/db
+- finish up build command
 
+- create automated tests using kitchenci for local machine building and checking if play was deployed correctly
+- finish up test command
 
+- create db and web IaC at once from terraform templates using created AMIs with packer and save terraform state to local/remote store
+- finish up create command
 
+- destroy db and web Iac at once using terraform templates
+- finish up destroy command
 
+- create infrasctructure and provision using ansible
+- create bare infrasctructure and provision all using ansible
+- provision specific tag using ansible
+- finish up provision command
 
+- backup envs database by dumping it, compressing it and saving it to local/remote store
+- finish up backup command
 
+- create django-starter-kit template which uses cloud-starter-kit as devops tool
+- create www.mkitdevelopment.com website base using django-starter-kit
+- modify cloud-starter-kit to be using django-starter-kit
+- test if it works
 
+- make sure all environments are accessible by dns
 
 
 
@@ -54,13 +77,18 @@ Starter-kit UI pages:
     - python social auth (facebook/twitter/google)
     - change color of navigation bar (using semantic-ui and recompiling with django forms)
     - machine learning benchmark (linear regression)
-    - payments with paymill pro
+    - payments with paymill pro/sth similar
     - using elasticsearch/sorl search with react
     - login page with angular2
     - performance test by clicking a button (setup simple infra and with small instance run script)
     - godbox
     - fake https
     - create server on demand and destroy 5 minutes after creation (with timer)
+- coding exercises:
+    - CodeCata:
+        - 1
+        - 2
+        - ..
 - languages (hello world):
     - python
     - ruby
@@ -131,7 +159,6 @@ Starter-kit UI pages:
     - kitchenci
     - postfix
     - gitlab enterprise
-    - trac
 - provisioners:
     - ansible
     - puppet

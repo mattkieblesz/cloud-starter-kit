@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+require 'fileutils'
+
+unless Vagrant.has_plugin?("vagrant-hostsupdater")
+	system("vagrant plugin install vagrant-hostsupdater")
+	exec "vagrant #{ARGV.join' '}"
+end
+
+def ensureDir(dir)
+	dir = File.expand_path(dir)
+	if !File.directory? dir
+		FileUtils::mkpath(dir)
+	end
+	return dir
+end
+
+LOCAL_REPO_PATH = ensureDir(File.join(Dir.getwd, "{{ service_name }}"))
+VAGRANT_REPO_PATH = "/home/{{ service_name }}/code"
+
+Vagrant.configure(2) do |config|
+	config.vm.box = "ubuntu/trusty64"
+	config.vm.box_check_update = false
+
+	config.ssh.forward_agent = true
+
+	config.vm.network :forwarded_port, guest: 8080, host: {{ service_port }}
+	config.vm.network :private_network, ip: "{{ service_ip }}"
+	config.hostsupdater.aliases = [ "{{ service_name }}.app.internal" ]
+
+	config.vm.synced_folder LOCAL_REPO_PATH, VAGRANT_REPO_PATH, mount_options: ["dmode=777,fmode=777"]
+
+	config.vm.provider :virtualbox do |vb|
+		vb.customize ["modifyvm", :id, "--memory", 1024]
+		vb.customize ["modifyvm", :id, "--cpus", 1]
+		vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+		vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+	end
+
+	config.vm.provision "ansible" do |ansible|
+		ansible.playbook = "{{ service_name }}.yml"
+	end
+
+end
