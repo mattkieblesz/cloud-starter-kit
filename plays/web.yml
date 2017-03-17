@@ -4,4 +4,4 @@
   hosts: "{{ hosts }}"
 
   roles:
-    - role: web
+    - web

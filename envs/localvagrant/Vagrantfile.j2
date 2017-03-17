@@ -14,8 +14,11 @@ def ensureDir(dir)
 	return dir
 end
 
-LOCAL_REPO_PATH = ensureDir(File.join(Dir.getwd, "{{ service_name }}"))
+{% if sync_folder %}
+WORKSPACE_DIR = File.join(Dir.getwd, "..", "..", "..", "..", "..", "..")
+LOCAL_REPO_PATH = ensureDir(File.join(WORKSPACE_DIR, "{{ sync_folder }}"))
 VAGRANT_REPO_PATH = "/home/{{ service_name }}/code"
+{% endif %}
 
 Vagrant.configure(2) do |config|
 	config.vm.box = "ubuntu/trusty64"
@@ -27,7 +30,7 @@ Vagrant.configure(2) do |config|
 	config.vm.network :private_network, ip: "{{ service_ip }}"
 	config.hostsupdater.aliases = [ "{{ service_name }}.app.internal" ]
 
-	config.vm.synced_folder LOCAL_REPO_PATH, VAGRANT_REPO_PATH, mount_options: ["dmode=777,fmode=777"]
+	{% if sync_folder %}config.vm.synced_folder LOCAL_REPO_PATH, VAGRANT_REPO_PATH, mount_options: ["dmode=777,fmode=777"]{% endif %}
 
 	config.vm.provider :virtualbox do |vb|
 		vb.customize ["modifyvm", :id, "--memory", 1024]
@@ -37,7 +40,11 @@ Vagrant.configure(2) do |config|
 	end
 
 	config.vm.provision "ansible" do |ansible|
-		ansible.playbook = "../../../../plays/{{ service_name }}.yml"
+		ansible.playbook = "../../../../../plays/{{ service_name }}.yml"
+		ansible.extra_vars = {
+			'hosts' => 'default',
+			'pwd' => File.dirname(__FILE__),
+		}
 	end
 
 end

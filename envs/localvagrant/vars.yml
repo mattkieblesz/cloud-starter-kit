@@ -1,7 +1,9 @@
 services:
   - play: 'web'
     ip: 192.168.10.0
+    sync_folder: 'my_project'
     port: 8000
   - play: 'db'
     ip: 192.168.11.0
     port: 5432
+    sync_folder: null

@@ -54,7 +54,7 @@ main() {
     inf "-->    type: $TYPE"
 
     if [ $TYPE = "vagrant" ]; then
-        inf "--> Copy template files"
+        inf "--> Run vagrant up"
     fi
 }
 
