@@ -41,8 +41,7 @@ main() {
 
         # run configuration playbook if present
         if [ -f $configure_playbook ]; then
-            ANSIBLE_CONFIG=$SCRIPT_DIR/../conf/ansible.cfg ansible-playbook $configure_playbook \
-                --extra-vars="env=$env_name"
+            ANSIBLE_CONFIG=$BASE_DIR/conf/ansible.cfg ansible-playbook $configure_playbook --extra-vars="env_name=$env_name"
         fi
 
         # sync store to remote

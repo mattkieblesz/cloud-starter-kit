@@ -2,3 +2,4 @@
 /conf/vpass
 /envs/*/store
 /roles/vendor
+*.retry

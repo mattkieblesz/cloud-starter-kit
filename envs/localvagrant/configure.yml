@@ -1,9 +1,20 @@
 ---
 
-- name: Render {{ template_name }} file
+- name: Configure {{ env_name }} environment
   hosts: localhost
+  vars_files:
+  - vars.yml
   tasks:
-  - name: Copy template
+  - name: Create config dirs for each service
+    file: path=store/services/{{ item.play }} state=directory mode=0755
+    with_items: "{{ services }}"
+
+  - name: Create Vagrantfile for each service
     template:
-      src: ../templates/{{ template_name }}.j2
-      dest: ../../store/{{ env }}/services/{{ play }}/{{ template_name }}
+      src: Vagrantfile.j2
+      dest: store/services/{{ item.play }}/Vagrantfile
+    vars:
+      service_name: "{{ item.play }}"
+      service_ip: "{{ item.ip }}"
+      service_port: "{{ item.port }}"
+    with_items: "{{ services }}"
