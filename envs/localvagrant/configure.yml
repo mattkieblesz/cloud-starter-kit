@@ -1,0 +1,9 @@
+---
+
+- name: Render {{ template_name }} file
+  hosts: localhost
+  tasks:
+  - name: Copy template
+    template:
+      src: ../templates/{{ template_name }}.j2
+      dest: ../../store/{{ env }}/services/{{ play }}/{{ template_name }}

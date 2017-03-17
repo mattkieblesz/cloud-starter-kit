@@ -1,5 +1,4 @@
 /conf/aws-config
 /conf/vpass
-/store
-!/store/README.md
+/envs/*/store
 /roles/vendor

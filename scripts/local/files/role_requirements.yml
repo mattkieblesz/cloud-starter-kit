@@ -1,0 +1,35 @@
+- src: git+https://github.com/mkitdevelopment/ansible-sudoers.git
+  version: "v0.0.1"
+  name: ansible-sudoers
+
+- src: git+https://github.com/mkitdevelopment/ansible-users.git
+  version: "v0.0.1"
+  name: ansible-users
+
+# - src: git+https://github.com/mkitdevelopment/ansible-security.git
+#   version: "v0.0.1"
+#   name: ansible-security
+
+# - src: git+https://github.com/mkitdevelopment/ansible-python.git
+#   version: "v0.0.1"
+#   name: ansible-python
+
+# - src: git+https://github.com/mkitdevelopment/ansible-nginx.git
+#   version: "v0.0.1"
+#   name: ansible-nginx
+
+# - src: git+https://github.com/mkitdevelopment/ansible-postgresql.git
+#   version: "v0.0.1"
+#   name: ansible-postgresql
+
+# - src: git+https://github.com/mkitdevelopment/ansible-redis.git
+#   version: "v0.0.1"
+#   name: ansible-redis
+
+# - src: git+https://github.com/mkitdevelopment/ansible-celery.git
+#   version: "v0.0.1"
+#   name: ansible-celery
+
+# - src: git+https://github.com/mkitdevelopment/ansible-elasticsearch.git
+#   version: "v0.0.1"
+#   name: ansible-elasticsearch

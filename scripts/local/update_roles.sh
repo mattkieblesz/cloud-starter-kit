@@ -4,7 +4,7 @@ readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 readonly BASE_DIR=$( cd $SCRIPT_DIR/.. && pwd )
 
 readonly VENDOR_ROLES_DIR="$BASE_DIR/roles/vendor"
-readonly VENDOR_ROLES_REQUIREMNTS="$SCRIPT_DIR/files/role_requirements.yml"
+readonly VENDOR_ROLES_REQUIREMNTS="$SCRIPT_DIR/local/files/role_requirements.yml"
 
 source "$SCRIPT_DIR/utils.sh"
 

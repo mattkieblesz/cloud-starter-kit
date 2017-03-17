@@ -12,7 +12,7 @@
 # if local vagrant
 #   run vagrant up
 
-readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 
 source "$SCRIPT_DIR/utils.sh"
 

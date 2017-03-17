@@ -70,11 +70,16 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         secrets.yml
 
       dev/
+        store/                  # local storage directory which has same structure as remote store (s3 bucket)
+          backups/              # backups/snapshots etc.
+          images/               # all playbook images are stored in this folder
+          state.tfstate         # current terraform state in prd environment
+          inventory.ini         # current ansible inventory file for prd environment
         vars.yml                # File with all vars to services
         secrets-plain.yml       # Secret file template (not used)
         secrets.yml             # One file with secrets for environment
-        inventory.ini           # Dynamic inventory file which includes location
         terraform.tf            # Environment infra as code setup
+
       stg
         ...
         terraform.tf            # Linked from prd environment (will be used with different vars)
@@ -103,11 +108,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
       provision.sh              # provision playbook
       test.sh                   # perform all tests including infrastructure tests
 
-    store/                      # local storage directory which has same structure as remote store (s3 bucket)
-      dev/backups/              # backups/snapshots etc.
-      dev/images/               # all playbook images are stored in this folder
-      dev/terraform.tfstate     # current terraform state in prd environment
-      dev/inventory.ini         # current ansible inventory file for prd environment
+
       stg/                      # ...
       prd/                      # ...
 

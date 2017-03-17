@@ -1,11 +1,23 @@
-- create temp folder for vagrant/docker/packer templates
-- create dns config file in yml format with public and private domains
-- create Vagrantfile for web from template and run it
-- create Vagrantfile for db and web at the same time and run them
-- create Packer template for web/db from template and AWS AMI machine using AWS/docker/vagrant/, compress it and save in local/remote store
-- use same packer template to create docker image for web/db
-- use same packer template to create vagrant image for web/db
-- finish up build command
+- create dynamic build command
+    - create ansible play to render templates locally for makefile targets
+    - create dns config file in yml format with public and private domains in localvagrant, localdocker and dev environments
+    - create following vendor roles:
+        ansible-apt
+        ansible-sercurity
+        ansible-sudoers
+        ansible-python
+
+        ansible-nginx
+        ansible-uwsgi
+        ansible-postgresql
+        ansible-nodejs
+        ansible-haproxy
+    - create Vagrantfile for web from template and run it
+    - create Vagrantfile for db and web at the same time and run them
+    - create Packer template for web/db from template and AWS AMI machine using AWS/docker/vagrant/, compress it and save in local/remote store
+    - use same packer template to create docker image for web/db
+    - use same packer template to create vagrant image for web/db
+    - finish up build command
 
 - create automated tests using kitchenci for local machine building and checking if play was deployed correctly
 - finish up test command
@@ -80,6 +92,7 @@ Starter-kit UI pages:
     - payments with paymill pro/sth similar
     - using elasticsearch/sorl search with react
     - login page with angular2
+    - real time feed + notifications react app
     - performance test by clicking a button (setup simple infra and with small instance run script)
     - godbox
     - fake https

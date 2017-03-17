@@ -18,7 +18,7 @@ create-service:
 
 # mgt tool to build images
 build:
-	./scripts/build_image.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
+	./scripts/management/build_image.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
 
 # mgt tool to run test suite
 test:
@@ -26,7 +26,7 @@ test:
 
 # mgt tool to create infrastructure as code
 create:
-	./scripts/create.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
+	./scripts/management/create.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
 
 # mgt tool to destroy infrastructure as code
 destroy:
