@@ -1,5 +1,3 @@
 ---
 
-dependencies:
-  - { role: common, tags: ["common"] }
-  - { role: ANXS.postgresql, tags: ["postgresql"] }
+dependencies: []

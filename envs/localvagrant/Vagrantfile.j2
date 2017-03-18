@@ -14,11 +14,6 @@ def ensureDir(dir)
 	return dir
 end
 
-{% if sync_folder %}
-WORKSPACE_DIR = File.join(Dir.getwd, "..", "..", "..", "..", "..", "..")
-LOCAL_REPO_PATH = ensureDir(File.join(WORKSPACE_DIR, "{{ sync_folder }}"))
-VAGRANT_REPO_PATH = "/home/{{ service_name }}/code"
-{% endif %}
 
 Vagrant.configure(2) do |config|
 	config.vm.box = "ubuntu/trusty64"
@@ -30,7 +25,11 @@ Vagrant.configure(2) do |config|
 	config.vm.network :private_network, ip: "{{ service_ip }}"
 	config.hostsupdater.aliases = [ "{{ service_name }}.app.internal" ]
 
-	{% if sync_folder %}config.vm.synced_folder LOCAL_REPO_PATH, VAGRANT_REPO_PATH, mount_options: ["dmode=777,fmode=777"]{% endif %}
+	{% if sync_folder %}
+	config.vm.synced_folder ensureDir(File.join(Dir.getwd, "..", "..", "..", "..", "..", "workspace", "{{ sync_folder }}")),
+		"/home/{{ service_name }}/code",
+		mount_options: ["dmode=777,fmode=777"]
+	{% endif %}
 
 	config.vm.provider :virtualbox do |vb|
 		vb.customize ["modifyvm", :id, "--memory", 1024]

@@ -20,7 +20,7 @@ main() {
     inf "--> Touch Ansible-Vault pass"
     touch conf/vpass
 
-    inf "--> Setup workspace dit"
+    inf "--> Setup workspace git"
     mkdir -p $WORKSPACE_DIR
 
     inf "--> Setup AWS credentials"
@@ -37,8 +37,10 @@ main() {
         ln -s $BASE_DIR/conf/vpass $ANSIBLE_VAULT_PASS_FILE_LINK
     fi
 
-    inf "--> Creating remote store s3 bucket"
-    # /usr/local/bin/aws s3 mb s3://$STORE_BUCKET_NAME
+    inf "--> Creating remote store s3 bucket if doesn't exist already"
+    if [ $( /usr/local/bin/aws s3 ls | grep $STORE_BUCKET_NAME | wc -l ) == 0 ]; then
+        /usr/local/bin/aws s3 mb s3://$STORE_BUCKET_NAME
+    fi
 
     for dir in envs/*/;  # list all dirs in envs directory
     do

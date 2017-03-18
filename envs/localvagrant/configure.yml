@@ -3,7 +3,7 @@
 - name: Configure {{ env_name }} environment
   hosts: localhost
   vars_files:
-    - vars.yml
+    - ../../conf/config.yml
   tasks:
     - name: Create config dirs for each service
       file: path=store/services/{{ item.play }} state=directory mode=0755

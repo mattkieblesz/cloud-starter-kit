@@ -1,7 +1,7 @@
 ## Installation
 
 You need to setup your remote store for all current configuration/management purposes. For this we use s3 bucket so you
-need to update your global aws credentials and config file (located in `conf` directory). Then run `make configure`
+need to update your global aws credentials and config file (located in `conf` directory). Also update `conf/services.yml` file which will be used to setup local environment. Then run `make configure`
 to link files.
 
 Then just run `sudo make setup` to install all requirements and update vendor roles with `make update-roles`. Done.
@@ -53,7 +53,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
           rolestuff
         role10/
           rolestuff
-      js_roles/                 # All the roles that common to different roles
+      js_roles/                 # All the roles that common to different roles, but to tied to project to seperate
         commonrole1/
           rolestuff
       vendor/                   # All the roles that are in git or ansible galaxy (excluded from git)
@@ -115,6 +115,10 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
     templates/                  # templates used in this repo
       Vagrant.j2                # vagrant template used for this environment
 
+    workspace/                  # all repos which are developed and used in the cloud will be cloned here
+      webapp/                   # webbapp repo
+      proxy/                    # proxy repo
+      ...
 
 ## Resource naming convention
 

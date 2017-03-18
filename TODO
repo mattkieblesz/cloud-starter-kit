@@ -1,8 +1,6 @@
 - create dynamic build command
-    - create ansible play to render templates locally for makefile targets
-    - create dns config file in yml format with public and private domains in localvagrant, localdocker and dev environments
     - create following vendor roles:
-        ansible-apt
+        ansible-users
         ansible-sercurity
         ansible-sudoers
         ansible-python

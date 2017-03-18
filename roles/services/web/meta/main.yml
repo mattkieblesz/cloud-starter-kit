@@ -1,5 +1,3 @@
 ---
 
-dependencies:
-  - { role: common, tags: ["common"] }
-  - { role: ansible-nginx, tags: ["nginx"] }
+dependencies: []

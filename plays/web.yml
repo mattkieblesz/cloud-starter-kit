@@ -2,6 +2,7 @@
 
 - name: Build Web instance
   hosts: "{{ hosts }}"
+  become: yes
 
   roles:
     - web
