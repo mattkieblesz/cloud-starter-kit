@@ -1,9 +1,20 @@
 services:
-  - play: 'web'
-    ip: 192.168.10.0
-    sync_folder: 'my_project'
-    port: 8000
-  - play: 'db'
-    ip: 192.168.11.0
-    port: 5432
-    sync_folder: null
+  - name: 'webapp'
+    vagrant:
+      ip: 192.168.10.0
+      port: 8000
+      sync: true
+    docker:
+      ip: 192.168.20.0
+      port: 8000
+      sync: true
+
+  - name: 'database'
+    vagrant:
+      ip: 192.168.11.0
+      port: 5432
+      sync: false
+    docker:
+      ip: 192.168.21.0
+      port: 8000
+      sync: false

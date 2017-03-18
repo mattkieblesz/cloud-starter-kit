@@ -1,27 +1,24 @@
 ---
 
-- name: Configure {{ env_name }} environment
+- name: Configure local development environment using Vagrant
   hosts: localhost
   vars_files:
-    - ../../conf/config.yml
+    - '{{ base_dir }}/conf/config.yml'
   tasks:
     - name: Create config dirs for each service
-      file: path=store/services/{{ item.play }} state=directory mode=0755
+      file: path=store/services/{{ item.name }} state=directory mode=0755
       with_items: "{{ services }}"
 
     - name: Create Vagrantfile for each service
       template:
         src: Vagrantfile.j2
-        dest: store/services/{{ item.play }}/Vagrantfile
+        dest: store/services/{{ item.name }}/Vagrantfile
       vars:
-        sync_folder: "{{ item.sync_folder }}"
-        service_name: "{{ item.play }}"
-        service_ip: "{{ item.ip }}"
-        service_port: "{{ item.port }}"
+        service: "{{ item }}"
       with_items: "{{ services }}"
 
     - name: Copy ansible.cfg for each service
       template:
         src: ansible.cfg.j2
-        dest: store/services/{{ item.play }}/ansible.cfg
+        dest: store/services/{{ item.name }}/ansible.cfg
       with_items: "{{ services }}"

@@ -1,0 +1,11 @@
+---
+
+- name: Build DB instance
+  hosts: "{{ hosts }}"
+  become: yes
+
+  vars:
+    base_dir: "{{playbook_dir}}/.."
+
+  roles:
+    - database

@@ -4,5 +4,8 @@
   hosts: "{{ hosts }}"
   become: yes
 
+  vars:
+    base_dir: "{{playbook_dir}}/.."
+
   roles:
-    - web
+    - webapp

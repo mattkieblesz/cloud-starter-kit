@@ -1,0 +1,17 @@
+---
+
+dependencies:
+  - role: ansible-users
+    users:
+      files_dir: "{{ base_dir }}/files"
+      users:
+        - name: '{{service.name}}'
+          group: '{{service.name}}'
+          shell: '/bin/bash'
+          comment: 'deploy user'
+          groups: 'wheel'
+          pub_key: '{{service.name}}-id_rsa.pub'
+          rc_files: ['.bashrc']
+      users_to_delete: []
+    tags:
+      - build
