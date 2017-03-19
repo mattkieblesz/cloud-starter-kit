@@ -1,14 +1,6 @@
 - src: git+https://github.com/mkitdevelopment/ansible-users.git
-  version: "v0.0.2"
+  version: "v0.0.3"
   name: ansible-users
-
-# - src: git+https://github.com/mkitdevelopment/ansible-sudoers.git
-#   version: "v0.0.1"
-#   name: ansible-sudoers
-
-# - src: git+https://github.com/mkitdevelopment/ansible-security.git
-#   version: "v0.0.1"
-#   name: ansible-security
 
 # - src: git+https://github.com/mkitdevelopment/ansible-python.git
 #   version: "v0.0.1"

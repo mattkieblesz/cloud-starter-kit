@@ -1,0 +1,2 @@
+Defaults:%admins !requiretty
+%admins ALL=(ALL) NOPASSWD: ALL

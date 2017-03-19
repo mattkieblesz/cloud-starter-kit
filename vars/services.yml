@@ -1,0 +1,32 @@
+base_dir: "{{playbook_dir}}/.."
+files_dir: "{{ base_dir }}/files"
+
+# ansible-users default roles
+users:
+  users:
+  - name: 'mkieblesz'
+    group: 'mkieblesz'
+    shell: '/bin/bash'
+    comment: 'Matt Kieblesz'
+    groups: 'wheel,admins'
+    pub_key: 'mkieblesz-id_rsa.pub'
+    rc_files: ['.bashrc']
+
+  sudoers:
+  - name: admins
+    user: "%admins"
+    runas: "ALL=(ALL)"
+    commands: "NOPASSWD: ALL"
+    defaults: "!requiretty"
+
+  - name: developers
+    user: "%developers"
+    runas: "ALL=(ALL)"
+    commands: "NOPASSWD: ALL"
+    defaults: "!requiretty"
+
+  - name: wheel
+    user: "%wheel"
+    runas: "ALL=(ALL)"
+    commands: "NOPASSWD: ALL"
+    defaults: "!requiretty"

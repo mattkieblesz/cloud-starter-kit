@@ -1,11 +1,11 @@
 ---
 
-- name: Build DB instance
+- name: Build database service
   hosts: "{{ hosts }}"
   become: yes
 
-  vars:
-    base_dir: "{{playbook_dir}}/.."
+  vars_files:
+    - ../vars/services.yml
 
   roles:
     - database

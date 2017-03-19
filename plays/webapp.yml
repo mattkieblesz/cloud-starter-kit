@@ -1,11 +1,11 @@
 ---
 
-- name: Build Web instance
+- name: Build webapp service
   hosts: "{{ hosts }}"
   become: yes
 
-  vars:
-    base_dir: "{{playbook_dir}}/.."
+  vars_files:
+    - ../vars/services.yml
 
   roles:
     - webapp
