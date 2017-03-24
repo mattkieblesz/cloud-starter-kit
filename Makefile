@@ -1,45 +1,44 @@
 .PHONY: all test build clean configure
 
-# configure credentials
-configure:
-	./scripts/local/configure.sh
 
-# setup devops toolset on current machine
-setup:
+#########
+# LOCAL #
+#########
+setup:  # setup devops toolset on current machine
 	./scripts/local/setup.sh
 
-# update ansible vendor roles
-update-roles:
+configure: update-roles  # configure credentials
+	./scripts/local/configure.sh
+
+update-roles:  # update ansible vendor roles
 	./scripts/local/update_roles.sh
 
-# creates new role
-create-service:
+create-service:  # creates new role
 	./scripts/local/create_service.sh
 
-# mgt tool to build images
-build:
+local_setup:  # creates and runs local environment machines
+	./scripts/local/local_setup.sh
+
+##############
+# MANAGEMENT #
+##############
+build:  # mgt tool to build images
 	./scripts/management/build_image.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
 
-# mgt tool to run test suite
-test:
+test:  # mgt tool to run test suite
 	echo "--> pass"
 
-# mgt tool to create infrastructure as code
-create:
+create:  # mgt tool to create infrastructure as code
 	./scripts/management/create.sh --play=$(PLAY) --type=$(TYPE) --store=$(STORE) --version=$(VERSION)
 
-# mgt tool to destroy infrastructure as code
-destroy:
+destroy:  # mgt tool to destroy infrastructure as code
 	echo "--> pass"
 
-# mgt tool to provision to already created infrastructure
-provision:
+provision:  # mgt tool to provision to already created infrastructure
 	echo "--> pass"
 
-# mgt tool to backup data
-backup:
+backup:  # mgt tool to backup data
 	echo "--> pass"
 
-# mgt tool to provision specific task to already created infrastructure like collectstatic in remote, deploy code, migrate ...
-provision-tag:
+provision-tag:  # mgt tool to provision specific task to already created infrastructure like collectstatic in remote, deploy code, migrate ...
 	echo "--> pass"

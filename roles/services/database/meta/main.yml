@@ -1,3 +1,18 @@
 ---
 
-dependencies: []
+dependencies:
+  - role: ansible-users
+    users:
+      users:
+        - name: '{{service.name}}'
+          group: '{{service.name}}'
+          shell: '/bin/bash'
+          comment: 'deploy user'
+          groups: 'wheel'
+
+    tags:
+      - build
+
+  - role: ansible-postgresql
+    postgresql_version: 9.6
+    postgresql_ext_postgis_version: "2.3"

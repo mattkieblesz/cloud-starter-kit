@@ -1,13 +1,7 @@
-- create dynamic build command
-    - create following vendor roles:
-        ansible-python
+- create local_setup command
+    - enable running services in docker instead of vagrant
 
-        ansible-nginx
-        ansible-uwsgi
-        ansible-postgresql
-        ansible-nodejs
-        ansible-haproxy
-    - create Vagrantfile for db and web at the same time and run them
+- create dynamic build command
     - create Packer template for web/db from template and AWS AMI machine using AWS/docker/vagrant/, compress it and save in local/remote store
     - use same packer template to create docker image for web/db
     - use same packer template to create vagrant image for web/db

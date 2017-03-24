@@ -9,6 +9,7 @@ readonly AWS_CONFIG_FILE_LINK="$AWS_CONFIG_DIR/config"
 readonly ANSIBLE_VAULT_PASS_FILE_LINK="$HOME/vpass"
 
 readonly STORE_BUCKET_NAME=$( cd $BASE_DIR && basename $(pwd) )
+readonly LOCAL_ENV="local"
 
 source "$SCRIPT_DIR/utils.sh"
 
@@ -38,9 +39,6 @@ main() {
         /usr/local/bin/aws s3 mb s3://$STORE_BUCKET_NAME
     fi
 
-    inf "--> Configure local environment"
-    ANSIBLE_CONFIG=$BASE_DIR/conf/ansible.cfg ansible-playbook $SCRIPT_DIR/local/configure.yml
-
     for dir in envs/*/;  # list all dirs in envs directory
     do
         dir=${dir%/}  # strip trailing slash
@@ -51,11 +49,11 @@ main() {
         inf "--> Configure $env_name store"
 
         # create local store dirs
-        mkdir -p $store_dir/backups $store_dir/services
-
-        # sync store to remote
-        # /usr/local/bin/aws s3 cp $store_dir s3://$STORE_BUCKET_NAME/$env_name --recursive --exclude '*/.vagrant/*'
+        mkdir -p $store_dir/backups
     done
+
+    inf "--> Sync remote and local store for local environment"
+    /usr/local/bin/aws s3 cp $store_dir s3://$STORE_BUCKET_NAME/$LOCAL_ENV --recursive
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main

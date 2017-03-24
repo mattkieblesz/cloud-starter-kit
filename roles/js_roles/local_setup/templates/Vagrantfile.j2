@@ -1,4 +1,6 @@
 # -*- mode: ruby -*-
+# {{ ansible_managed }}
+
 require 'fileutils'
 
 unless Vagrant.has_plugin?("vagrant-hostsupdater")
@@ -21,15 +23,16 @@ Vagrant.configure(2) do |config|
 
 	config.ssh.forward_agent = true
 
-	config.vm.network :forwarded_port, guest: 8080, host: {{ service.vagrant.port }}
+	config.vm.network :forwarded_port, guest: {{ service.vagrant.port }}, host: {{ service.vagrant.port }}
 	config.vm.network :private_network, ip: "{{ service.vagrant.ip }}"
 	config.hostsupdater.aliases = [ "{{ service.name }}.app.internal" ]
 
-	{% if service.vagrant.sync %}
-	config.vm.synced_folder ensureDir(File.join('{{ base_dir }}', "workspace", "{{ service.name }}")),
+	{% if service.repo is defined -%}
+	config.vm.synced_folder ensureDir(File.join('{{ workspace_dir }}', "{{ service.name }}")),
 		"/home/{{ service.name }}/code",
 		mount_options: ["dmode=777,fmode=777"]
-	{% endif %}
+
+	{% endif -%}
 
 	config.vm.provider :virtualbox do |vb|
 		vb.customize ["modifyvm", :id, "--memory", 1024]

@@ -1,0 +1,23 @@
+---
+
+- name: Configure local development environment using Vagrant
+  hosts: localhost
+
+  vars:
+    base_dir: '{{ playbook_dir }}/..'
+    workspace_dir: '{{ base_dir }}/workspace'
+
+    services:
+      - name: 'webapp'
+        repo: 'git@gitlab.com:mattkieblesz/mkitdevelopment.git'
+        vagrant:
+          ip: 192.168.10.0
+          port: 80
+
+      - name: 'database'
+        vagrant:
+          ip: 192.168.11.0
+          port: 5432
+
+  roles:
+    - local_setup

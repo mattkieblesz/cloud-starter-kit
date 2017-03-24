@@ -1,0 +1,19 @@
+- src: git+https://github.com/mkitdevelopment/ansible-users.git
+  version: "v0.0.3"
+  name: ansible-users
+
+- src: git+https://github.com/mkitdevelopment/ansible-python.git
+  version: "v0.0.1"
+  name: ansible-python
+
+- src: git+https://github.com/mkitdevelopment/ansible-nginx.git
+  version: "v0.0.2"
+  name: ansible-nginx
+
+- src: git+https://github.com/ANXS/postgresql.git
+  version: "v1.7.1"
+  name: ansible-postgresql
+
+- src: git+https://github.com/Oefenweb/ansible-haproxy
+  version: "v4.5.1"
+  name: ansible-haproxy

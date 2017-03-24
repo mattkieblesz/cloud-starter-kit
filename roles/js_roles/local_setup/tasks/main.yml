@@ -1,0 +1,32 @@
+---
+
+- name: Clone repo for each service if defined
+  git:
+    repo: '{{ item.repo }}'
+    dest: '{{ workspace_dir }}/{{ item.name }}'
+  with_items: '{{ services }}'
+  when: '{{ item.repo is defined }}'
+
+- name: Create service directories for services which don't have repos
+  vars:
+    service: '{{ item }}'
+  file:
+    path: '{{ workspace_dir }}/{{ item.name }}'
+    state: directory
+    mode: 0755
+  with_items: '{{ services }}'
+  when: '{{ item.repo is not defined }}'
+
+- name: Create Vagrantfile for each service
+  vars:
+    service: '{{ item }}'
+  template:
+    src: 'Vagrantfile.j2'
+    dest: '{{ workspace_dir }}/{{ service.name }}/Vagrantfile'
+  with_items: '{{ services }}'
+
+- name: Copy ansible.cfg for each service
+  template:
+    src: 'ansible.cfg.j2'
+    dest: '{{ workspace_dir }}/{{ item.name }}/ansible.cfg'
+  with_items: '{{ services }}'

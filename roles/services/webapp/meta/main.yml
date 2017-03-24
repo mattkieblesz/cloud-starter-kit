@@ -14,3 +14,7 @@ dependencies:
 
     tags:
       - build
+
+  - role: ansible-python
+
+  - role: ansible-nginx

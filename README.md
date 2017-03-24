@@ -54,7 +54,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         role10/
           rolestuff
       js_roles/                 # All the roles that common to different roles, but to tied to project to seperate
-        commonrole1/
+        local_setup/            # Sets up local development environment
           rolestuff
       vendor/                   # All the roles that are in git or ansible galaxy (excluded from git)
         role11/
@@ -100,6 +100,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         configure.sh            # configure credentials to infra provider and createing remote store
         update_roles.sh         # update vendor roles
         create_service.sh       # create new service role
+        compose.sh              # Create depending on the config Vagrant/Docker machines locally and run them
       backup.sh                 # backup datastores
       build_image.sh            # create service image
       create.sh                 # create resource from specified image
