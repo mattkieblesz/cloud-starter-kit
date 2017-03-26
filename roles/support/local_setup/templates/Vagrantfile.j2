@@ -3,32 +3,17 @@
 
 require 'fileutils'
 
-unless Vagrant.has_plugin?("vagrant-hostsupdater")
-	system("vagrant plugin install vagrant-hostsupdater")
-	exec "vagrant #{ARGV.join' '}"
-end
-
-def ensureDir(dir)
-	dir = File.expand_path(dir)
-	if !File.directory? dir
-		FileUtils::mkpath(dir)
-	end
-	return dir
-end
-
-
 Vagrant.configure(2) do |config|
 	config.vm.box = "ubuntu/trusty64"
 	config.vm.box_check_update = false
 
 	config.ssh.forward_agent = true
 
-	config.vm.network :forwarded_port, guest: {{ service.vagrant.port }}, host: {{ service.vagrant.port }}
-	config.vm.network :private_network, ip: "{{ service.vagrant.ip }}"
-	config.hostsupdater.aliases = [ "{{ service.name }}.app.internal" ]
+	config.vm.network :forwarded_port, guest: {{ service.port }}, host: {{ service.host_port if service.host_port is defined else service.port }}, auto_correct: true
+	config.vm.network :private_network, ip: "{{ service.ip }}"
 
 	{% if service.repo is defined -%}
-	config.vm.synced_folder ensureDir(File.join('{{ workspace_dir }}', "{{ service.name }}")),
+	config.vm.synced_folder File.join('{{ workspace_dir }}', "{{ service.name }}"),
 		"/home/{{ service.name }}/code",
 		mount_options: ["dmode=777,fmode=777"]
 
