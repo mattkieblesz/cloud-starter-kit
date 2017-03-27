@@ -1,4 +1,4 @@
-.PHONY: all test build clean configure
+.PHONY: all test run build clean configure
 
 
 #########
@@ -22,29 +22,29 @@ setup: install update-roles configure dev_setup
 ##############
 # MANAGEMENT #
 ##############
-create:  # mgt tool to create infrastructure as code
-	./scripts/manage.sh create --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+create:  # create infrastructure as code
+	./scripts/manage.sh create --service=$(SERVICE) --env=$(ENV)
 
-run:  # mgt tool to run already created infrastructure
-	./scripts/manage.sh run --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+run:  # run already created infrastructure
+	./scripts/manage.sh run --service=$(SERVICE) --env=$(ENV)
 
-halt:  # mgt tool to stop running infrastructure
-	./scripts/manage.sh halt --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+halt:  # stop running infrastructure
+	./scripts/manage.sh halt --service=$(SERVICE) --env=$(ENV)
 
-destroy:  # mgt tool to destroy infrastructure as code
-	./scripts/manage.sh destroy --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+destroy:  # destroy infrastructure as code
+	./scripts/manage.sh destroy --service=$(SERVICE) --env=$(ENV)
 
-deploy:  # mgt tool to deploy code using prebuild image/running provision command
-	./scripts/manage.sh deploy --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+deploy:  # deploy code using prebuild image/running provision command
+	./scripts/manage.sh deploy --service=$(SERVICE) --env=$(ENV)
 
-provision:  # mgt tool to provision to already created infrastructure
-	./scripts/manage.sh provision --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+provision:  # provision to already created infrastructure
+	./scripts/manage.sh provision --service=$(SERVICE) --env=$(ENV)
 
-build:  # mgt tool to build images
-	./scripts/manage.sh build --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+build:  # build images
+	./scripts/manage.sh build --service=$(SERVICE) --env=$(ENV)
 
-test:  # mgt tool to run test suite
-	./scripts/manage.sh test --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+backup:  # backup data
+	./scripts/manage.sh backup --service=$(SERVICE) --env=$(ENV)
 
-backup:  # mgt tool to backup data
-	./scripts/manage.sh backup --env=$(ENV) --play=$(PLAY) --image-type=$(IMAGE_TYPE) --store=$(STORE) --version=$(VERSION)
+test:  # run test suite
+	echo "Test"

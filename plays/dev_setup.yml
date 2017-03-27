@@ -10,13 +10,13 @@
     services:
       - name: 'webapp'
         repo: 'git@gitlab.com:mattkieblesz/mkitdevelopment.git'
-        ip: 192.168.10.0
+        ip: 192.168.10.10
         port: 80
         host_port: 8080
         type: 'vagrant'
 
       - name: 'database'
-        ip: 192.168.11.0
+        ip: 192.168.10.11
         port: 5432
         type: 'vagrant'
 
