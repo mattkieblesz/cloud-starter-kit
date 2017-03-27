@@ -23,6 +23,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         id_username.pub
 
     plays/
+      dev_setup.yml             # setup local development environment
       play1.yml                 # playbooks should have just services roles dependencies
       play2.yml                 # --||--
       performancetestplay.yml   # --||--
@@ -53,7 +54,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
           rolestuff
         role10/
           rolestuff
-      js_roles/                 # All the roles that common to different roles, but to tied to project to seperate
+      support/                  # All other roles
         local_setup/            # Sets up local development environment
           rolestuff
       vendor/                   # All the roles that are in git or ansible galaxy (excluded from git)
@@ -61,14 +62,12 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
           rolestuff
         role12/
           rolestuff
-      requirements.yml          # All the information about external roles
 
     envs/                       # Main entry point to infrastructure setup
       local/
         vars.yml
         secrets-plain.yml
         secrets.yml
-
       dev/
         store/                  # local storage directory which has same structure as remote store (s3 bucket)
           backups/              # backups/snapshots etc.
@@ -79,7 +78,6 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         secrets-plain.yml       # Secret file template (not used)
         secrets.yml             # One file with secrets for environment
         terraform.tf            # Environment infra as code setup
-
       stg
         ...
         terraform.tf            # Linked from prd environment (will be used with different vars)
@@ -93,28 +91,6 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         ...
 
     scripts/                    # utility scripts used by Makefile targets
-      files/                    # not script files used in scripts
-        role_requirements.yml   # vendor requirements
-      local/                    # for repo usage/configuration
-        setup.sh                # setup system requirements for using this repo
-        configure.sh            # configure credentials to infra provider and createing remote store
-        update_roles.sh         # update vendor roles
-        create_service.sh       # create new service role
-        compose.sh              # Create depending on the config Vagrant/Docker machines locally and run them
-      backup.sh                 # backup datastores
-      build_image.sh            # create service image
-      create.sh                 # create resource from specified image
-      deploy.sh                 # deploy service with provisioning or by create new resource in pararell and tearing down currently used
-      provision_tag.sh          # perform certain tasks against service
-      provision.sh              # provision playbook
-      test.sh                   # perform all tests including infrastructure tests
-
-
-      stg/                      # ...
-      prd/                      # ...
-
-    templates/                  # templates used in this repo
-      Vagrant.j2                # vagrant template used for this environment
 
     workspace/                  # all repos which are developed and used in the cloud will be cloned here
       webapp/                   # webbapp repo

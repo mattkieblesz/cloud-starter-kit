@@ -1,4 +1,4 @@
-- create local_setup command
+- create dev_setup command
     - enable running services in docker instead of vagrant
 
 - create dynamic build command

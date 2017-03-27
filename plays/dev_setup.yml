@@ -21,4 +21,4 @@
         type: 'vagrant'
 
   roles:
-    - local_setup
+    - dev_setup

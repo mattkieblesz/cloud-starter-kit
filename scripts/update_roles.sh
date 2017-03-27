@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
+readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 readonly BASE_DIR=$( cd $SCRIPT_DIR/.. && pwd )
 
 readonly VENDOR_ROLES_DIR="$BASE_DIR/roles/vendor"
