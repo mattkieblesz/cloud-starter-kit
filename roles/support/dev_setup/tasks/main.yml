@@ -27,6 +27,8 @@
   when: service.type == 'vagrant'
 
 - name: Copy ansible.cfg for each service
+  vars:
+    service: '{{ item }}'
   template:
     src: 'ansible.cfg.j2'
     dest: '{{ workspace_dir }}/{{ item.name }}/ansible.cfg'
@@ -38,4 +40,11 @@
     src: 'etc/hosts.j2'
     dest: '/etc/hosts'
     backup: yes
+  delegate_to: localhost
+
+- name: Create inventory file
+  become: yes
+  template:
+    src: 'inventory.j2'
+    dest: '{{ base_dir }}/envs/local/inventory'
   delegate_to: localhost

@@ -1,5 +1,11 @@
 - create dev_setup command
-    - enable running services in docker instead of vagrant
+    - create ansible provision file for docker deployment
+
+- manage docker containers
+    - create docker contianer
+    - halt docker contianer
+    - run docker container
+    - destroy docker contianer
 
 - create dynamic build command
     - create Packer template for web/db from template and AWS AMI machine using AWS/docker/vagrant/, compress it and save in local/remote store

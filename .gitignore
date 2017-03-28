@@ -1,6 +1,7 @@
 /conf/aws-config
 /conf/vpass
 /envs/*/store
+/envs/*/inventory
 /roles/vendor
 /workspace
 *.retry

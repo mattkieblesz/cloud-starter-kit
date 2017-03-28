@@ -35,6 +35,16 @@ parse_options() {
     fi
 }
 
+ansible_provision() {
+    env=$1
+    service_name=$2
+    config_file=$BASE_DIR/workspace/$service_name/ansible.cfg
+    inventory_file=$BASE_DIR/envs/$env/inventory
+    playbook_file=$BASE_DIR/plays/$service_name.yml
+
+    ANSIBLE_CONFIG=$config_file ansible-playbook -i $inventory_file $playbook_file --limit $service_name
+}
+
 main() {
     # Be unforgiving about errors
     set -euo pipefail
@@ -58,37 +68,45 @@ main() {
             service_dir="$WORKSPACE_DIR/$service_name"
             if [ -f $service_dir/Vagrantfile ]; then
                 type='vagrant'
-            elif [ -f $service_dir/Dockerfile ]; then
+            elif [ -f $service_dir/docker_provision.yml ]; then
                 type='docker'
             fi
 
             if [ $COMMAND == "create" ]; then
                 if [ $type == "vagrant" ]; then
                     (cd $service_dir && vagrant up)
+                elif [ $type == "docker" ]; then
+                    inf "Pass"
                 fi
             elif [ $COMMAND == "run" ]; then
                 if [ $type == "vagrant" ]; then
                     (cd $service_dir && vagrant up)
+                elif [ $type == "docker" ]; then
+                    inf "Pass"
                 fi
             elif [ $COMMAND == "halt" ]; then
                 if [ $type == "vagrant" ]; then
                     (cd $service_dir && vagrant halt)
+                elif [ $type == "docker" ]; then
+                    inf "Pass"
                 fi
             elif [ $COMMAND == "destroy" ]; then
                 if [ $type == "vagrant" ]; then
                     (cd $service_dir && vagrant destroy)
+                elif [ $type == "docker" ]; then
+                    inf "Pass"
                 fi
             elif [ $COMMAND == "provision" ]; then
                 if [ $type == "vagrant" ]; then
-                    (cd $service_dir && ansible-playbook -i inventory —private-key=~/.vagrant.d/insecure_private_key -u vagrant ../../plays/$service_name.yml —tags="$TAGS")
+                    (cd $service_dir && vagrant provision)
+                elif [ $type == "docker" ]; then
+                    inf "Pass"
                 fi
             elif [ $COMMAND == "deploy" ]; then
                 if [ $type == "vagrant" ]; then
-                    (cd $service_dir && ansible-playbook -i inventory —private-key=~/.vagrant.d/insecure_private_key -u vagrant ../../plays/$service_name.yml —tags="$TAGS")
-                fi
-            elif [ $COMMAND == "deploy" ]; then
-                if [ $type == "vagrant" ]; then
-                    (cd $service_dir && ansible-playbook -i inventory —private-key=~/.vagrant.d/insecure_private_key -u vagrant ../../plays/$service_name.yml —tags="$TAGS")
+                    (cd $service_dir && vagrant provision)
+                elif [ $type == "docker" ]; then
+                    inf "Pass"
                 fi
             fi
         done
@@ -101,12 +119,6 @@ main() {
 
             # if terraform (aws/scaleway)
             #   run terraform plan & apply if yes
-
-            # if local docker
-            #   run docker run
-
-            # if local vagrant
-            #   run vagrant up
         elif [ $COMMAND == "run" ]; then
             inf "Run infrastructure for $ENV environment"
 
@@ -121,13 +133,6 @@ main() {
 
             # if terraform (aws/scaleway)
             #   run terraform destroy & apply if yes
-
-            # if local docker
-            #   run docker rm
-
-            # if local vagrant
-            #   run vagrant destroy
-
         elif [ $COMMAND == "provision" ]; then
             inf "Provision to $ENV environment"
 

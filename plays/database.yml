@@ -1,7 +1,7 @@
 ---
 
 - name: Build database service
-  hosts: "{{ hosts }}"
+  hosts: services
   become: yes
 
   vars_files:

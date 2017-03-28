@@ -8,17 +8,24 @@
     workspace_dir: '{{ base_dir }}/workspace'
     local_url: 'example.com'
     services:
-      - name: 'webapp'
-        repo: 'git@gitlab.com:mattkieblesz/mkitdevelopment.git'
+      # - name: api
+      #   ip: 192.168.10.13
+      #   port: 80
+      #   host_port: 8080
+      #   sync_workspace: webapp  # tells which already existing folder in workspace should be synced
+      #   type: vagrant  # what type of virtualization should be used - vagrant or docker
+
+      - name: webapp
+        repo: git@gitlab.com:mattkieblesz/mkitdevelopment.git
         ip: 192.168.10.10
         port: 80
         host_port: 8080
-        type: 'vagrant'
+        type: vagrant
 
-      - name: 'database'
+      - name: database
         ip: 192.168.10.11
         port: 5432
-        type: 'vagrant'
+        type: vagrant
 
   roles:
     - dev_setup
