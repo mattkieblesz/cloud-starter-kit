@@ -4,14 +4,13 @@ readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 readonly INSTALL_DIR="/usr/local/bin"
 readonly DOWNLOAD_DIR="/tmp"
 
-readonly TERRAFORM_VERSION="0.8.6"
+readonly TERRAFORM_VERSION="0.9.10"
 readonly TERRAFORM_DOWNLOAD_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
-readonly PACKER_VERSION="0.12.2"
+readonly PACKER_VERSION="1.0.2"
 readonly PACKER_DOWNLOAD_URL="https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
-readonly VAGRANT_VERSION="1.9.3"
+readonly VAGRANT_VERSION="1.9.6"
 readonly VAGRANT_DOWNLOAD_URL="https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb"
-readonly DOCKER_VERSION="1.13.1"
-readonly DOCKER_DOWLOAD_URL="https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_${DOCKER_VERSION}-0~ubuntu-trusty_amd64.deb"
+readonly DOCKER_DOWLOAD_URL="https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_17.05.0~ce-0~ubuntu-xenial_amd64.deb"
 
 source "$SCRIPT_DIR/utils.sh"
 
@@ -19,7 +18,6 @@ prerequisites() {
     local curl_cmd=`which curl`
     local unzip_cmd=`which unzip`
     local python_cmd=`which python`
-    local pip_cmd=`which pip`
     local system=$(uname)
 
     if [ -z "$curl_cmd" ]; then
@@ -34,11 +32,6 @@ prerequisites() {
 
     if [ -z "$python_cmd" ]; then
         error "python does not appear to be installed. Please install and re-run this script."
-        exit 1
-    fi
-
-    if [ -z "$pip_cmd" ]; then
-        error "pip does not appear to be installed. Please install and re-run this script."
         exit 1
     fi
 
@@ -86,7 +79,7 @@ main() {
 
     inf "--> Installing core requirements"
     apt-get update
-    apt-get install build-essential python-dev python-pip python3-pip
+    apt-get install build-essential python-dev python-pip python3-pip libssl-dev
 
     inf "--> Installing Terraform"
     install_binary "$DOWNLOAD_DIR/terraform.zip" $TERRAFORM_DOWNLOAD_URL
@@ -95,11 +88,11 @@ main() {
     install_binary "$DOWNLOAD_DIR/packer.zip" $PACKER_DOWNLOAD_URL
 
     inf "--> Installing Ansible"
-    pip install ansible==2.2.1  # use python2.7 since ansible doesn't support 3 yet
+    pip install ansible==2.3.1  # use python2.7 since ansible doesn't support 3 yet
 
     inf "--> Installing awscli"
     # ignore six if installed https://github.com/aws/aws-cli/issues/1522#issuecomment-159007931
-    pip install awscli==1.11.47 --upgrade --ignore-installed six
+    pip install awscli==1.11.114 --upgrade --ignore-installed six
 
     inf "--> Installing Docker"
     # https://docs.docker.com/engine/installation/linux/ubuntu/#install-from-a-package
