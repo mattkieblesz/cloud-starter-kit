@@ -7,25 +7,38 @@
     base_dir: '{{ playbook_dir }}/..'
     workspace_dir: '{{ base_dir }}/workspace'
     local_url: 'example.com'
+    docker:
+      network_name: 'cloud-starter-kit'
+      network_subnet: '192.168.20.0/24'
     services:
       # - name: api
+      #   url: local-webapp.example.com
       #   ip: 192.168.10.13
-      #   port: 80
-      #   host_port: 8080
+      #   ports:
+      #   - guest_port: 80
+      #     host_port: 8080
+      #   image: ubuntu:14.04 (for docker) or ubuntu/trusty64 (for vagrant)
       #   sync_workspace: webapp  # tells which already existing folder in workspace should be synced
       #   type: vagrant  # what type of virtualization should be used - vagrant or docker
 
       - name: webapp
         repo: git@gitlab.com:mattkieblesz/mkitdevelopment.git
+        url: local-webapp.example.com
         ip: 192.168.10.10
-        port: 80
-        host_port: 8080
+        image: ubuntu/trusty64
+        ports:
+        - guest: 80
+          host: 8080
         type: vagrant
 
       - name: database
-        ip: 192.168.10.11
-        port: 5432
-        type: vagrant
+        url: local-database.example.com
+        ip: 192.168.20.10
+        image: ubuntu:14.04
+        ports:
+        - guest: 5432
+          host: 5432
+        type: docker
 
   roles:
     - dev_setup

@@ -106,6 +106,9 @@ main() {
 
     inf "--> Installing Vagrant"
     install_deb "$DOWNLOAD_DIR/vagrant.deb" $VAGRANT_DOWNLOAD_URL
+
+    inf "--> Installing Vagrant plugins"
+    vagrant plugin install vagrant-hostsupdater
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main

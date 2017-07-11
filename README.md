@@ -55,7 +55,7 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         role10/
           rolestuff
       support/                  # All other roles
-        local_setup/            # Sets up local development environment
+        dev_setup/              # Sets up local development environment
           rolestuff
       vendor/                   # All the roles that are in git or ansible galaxy (excluded from git)
         role11/
