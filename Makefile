@@ -23,7 +23,7 @@ setup: install update-roles configure dev_setup
 # MANAGEMENT #
 ##############
 create:  # create infrastructure as code
-	./scripts/manage.sh create --service=$(SERVICE) --env=$(ENV)
+	./scripts/manage.sh create --service=$(SERVICE) --env=$(ENV) --version=$(VERSION)
 
 destroy:  # destroy infrastructure as code
 	./scripts/manage.sh destroy --service=$(SERVICE) --env=$(ENV)

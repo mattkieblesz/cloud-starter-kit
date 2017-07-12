@@ -52,7 +52,7 @@ main() {
         mkdir -p $store_dir/backups
     done
 
-    inf "--> Sync remote and local store for local environment"
+    inf "--> Sync local stores to s3"
     /usr/local/bin/aws s3 cp $store_dir s3://$STORE_BUCKET_NAME/$LOCAL_ENV --recursive
 }
 

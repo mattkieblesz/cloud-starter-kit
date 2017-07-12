@@ -4,5 +4,6 @@
 /envs/*/inventory
 /envs/*/ansible.cfg
 /roles/vendor
+/tmp
 /workspace
 *.retry
