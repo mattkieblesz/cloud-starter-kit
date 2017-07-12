@@ -1,4 +1,5 @@
 /conf/aws-config
+/conf/credentials.json
 /conf/vpass
 /envs/*/store
 /envs/*/inventory
