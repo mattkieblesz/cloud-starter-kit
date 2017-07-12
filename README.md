@@ -23,7 +23,6 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
         id_username.pub
 
     plays/
-      dev_setup.yml             # setup local development environment
       play1.yml                 # playbooks should have just services roles dependencies
       play2.yml                 # --||--
       performancetestplay.yml   # --||--
@@ -65,7 +64,8 @@ Then just run `sudo make setup` to install all requirements and update vendor ro
 
     envs/                       # Main entry point to infrastructure setup
       local/
-        vars.yml
+        dev_setup.yml           # setup local development environment playbook
+        vars.yml                # local setup variables
         secrets-plain.yml
         secrets.yml
       dev/

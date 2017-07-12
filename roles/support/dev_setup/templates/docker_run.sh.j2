@@ -1,0 +1,1 @@
+docker run{% for port in service.ports %} -p {{ port.guest }}{% if port.host is defined %}:{{ port.host }}{% endif %}{% endfor %} --net {{ docker.network_name }} --ip {{ service.ip }} -d -i -t $1

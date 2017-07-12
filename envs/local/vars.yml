@@ -29,5 +29,6 @@ services:
     image: rastasheep/ubuntu-sshd:14.04
     ports:
     - guest: 5432
-      # host: 5432
+      # host: 5431
+    - guest: 22
     type: docker

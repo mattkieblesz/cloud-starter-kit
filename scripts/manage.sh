@@ -12,7 +12,6 @@ DEFAULT_SERVICE="all"
 DEFAULT_ENV="local"
 DEFAULT_STORE="local"  # local/s3
 DEFAULT_VERSION="$( git rev-parse HEAD )"  # <tag-name> or <commit-hash>
-DEFAULT_TAGS="all"
 
 parse_options() {
     # getopt doesn't know what empty string means! use substring matching instead
@@ -23,7 +22,6 @@ parse_options() {
             --store=*) STORE="${option#*=}" && [ -z "$STORE" ] && STORE=$DEFAULT_STORE;;
             --version=*) VERSION="${option#*=}" && [ -z "$VERSION" ] && VERSION=$DEFAULT_VERSION;;
             --service=*) SERVICE="${option#*=}" && [ -z "$SERVICE" ] && SERVICE=$DEFAULT_SERVICE;;
-            --tags=*) TAGS="${option#*=}" && [ -z "$TAGS" ] && TAGS=$DEFAULT_TAGS;;
             (*) break;;
         esac
     done
@@ -38,11 +36,12 @@ parse_options() {
 ansible_provision() {
     env=$1
     service_name=$2
-    config_file=$BASE_DIR/workspace/$service_name/ansible.cfg
+    tag=$3
+    config_file=$BASE_DIR/envs/$env/ansible.cfg
     inventory_file=$BASE_DIR/envs/$env/inventory
     playbook_file=$BASE_DIR/plays/$service_name.yml
 
-    ANSIBLE_CONFIG=$config_file ansible-playbook -i $inventory_file $playbook_file --limit $service_name
+    ANSIBLE_CONFIG=$config_file ansible-playbook -i $inventory_file $playbook_file --limit $service_name --tags $tag
 }
 
 main() {
@@ -51,108 +50,151 @@ main() {
 
     parse_options
 
-    if [ $COMMAND == "build" ]; then
-        inf "Building image with packer"
+    if [ $COMMAND == "create" ]; then
+        inf "Create infrastructure for $ENV environment"
 
-    elif [ $COMMAND == "test" ]; then
-        inf "Run test suite"
+        # Discover if we are using terraform aws/terraform scaleway/local docker/local vagrant/local hybrid
+        # Discover if we are using images
 
-    elif [ $COMMAND == "backup" ]; then
-        inf "Backup datastore for $ENV environment"
-        # Run only against datastore resources
-        # Get playbooks tasks by using tags which will do backing up
+        # if terraform (aws/scaleway)
+        #   run terraform plan & apply if yes
 
-    elif [ $ENV == "local" ]; then
-        for service_name in $SERVICES;
-        do
-            service_dir="$WORKSPACE_DIR/$service_name"
-            if [ -f $service_dir/Vagrantfile ]; then
-                type='vagrant'
-            elif [ -f $service_dir/Dockerfile ]; then
-                type='docker'
-            fi
-            image_name="$type-$service_name"
-            image_tag=$DEFAULT_VERSION
+        if [ $ENV == 'local' ]; then
+            for service_name in $SERVICES;
+            do
+                service_dir="$WORKSPACE_DIR/$service_name"
 
-            if [ $COMMAND == "create" ]; then
-                if [ $type == "vagrant" ]; then
+                if [ -f $service_dir/Vagrantfile ]; then
                     (cd $service_dir && vagrant up)
-                elif [ $type == "docker" ]; then
+
+                elif [ -f $service_dir/Dockerfile ]; then
+                    image_name="docker-$service_name"
+                    image_tag=$DEFAULT_VERSION
+
                     (cd $service_dir && docker build -t $image_name:$image_tag .)
                 fi
-            elif [ $COMMAND == "run" ]; then
-                if [ $type == "vagrant" ]; then
-                    (cd $service_dir && vagrant up)
-                elif [ $type == "docker" ]; then
-                    if [[ "$(docker build -q $image_name:$image_tag 2> /dev/null)" == "" ]]; then
-                        (cd $service_dir && docker build -t $image_name:$image_tag .)
-                    fi
-                    (cd $service_dir && docker run -p 22 --net cloud-starter-kit --ip 192.168.20.10 -d -i -t $image_name:$image_tag)
-                fi
-            elif [ $COMMAND == "halt" ]; then
-                if [ $type == "vagrant" ]; then
-                    (cd $service_dir && vagrant halt)
-                elif [ $type == "docker" ]; then
-                    (cd $service_dir && docker stop $(docker ps -q --filter ancestor=$image_name:$image_tag ))
-                fi
-            elif [ $COMMAND == "destroy" ]; then
-                if [ $type == "vagrant" ]; then
+
+                make run SERVICE=$service_name ENV=local
+            done
+        else
+            env_dir="$BASE_DIR/envs/$ENV"
+            if [ -f $env_dir/terraform.tf ]; then
+                inf "Terraform cmd"
+            fi
+        fi
+
+    elif [ $COMMAND == "destroy" ]; then
+        # Discover if we are using terraform aws/terraform scaleway/local docker/local vagrant
+        # Discover if we are using images
+
+        # if terraform (aws/scaleway)
+        #   run terraform destroy & apply if yes
+
+        if [ $ENV == 'local' ]; then
+            for service_name in $SERVICES;
+            do
+                service_dir="$WORKSPACE_DIR/$service_name"
+
+                if [ -f $service_dir/Vagrantfile ]; then
                     (cd $service_dir && vagrant destroy)
-                elif [ $type == "docker" ]; then
+
+                elif [ -f $service_dir/Dockerfile ]; then
+                    image_name="docker-$service_name"
+                    image_tag=$DEFAULT_VERSION
+
                     (cd $service_dir && docker stop $(docker ps -q --filter ancestor=$image_name:$image_tag ))
                     (cd $service_dir && docker rmi $image_name:$image_tag)
                 fi
-            elif [ $COMMAND == "provision" ]; then
-                if [ $type == "vagrant" ]; then
-                    (cd $service_dir && vagrant provision)
-                elif [ $type == "docker" ]; then
-                    inf "Pass"
-                fi
-            elif [ $COMMAND == "deploy" ]; then
-                if [ $type == "vagrant" ]; then
-                    (cd $service_dir && vagrant provision)
-                elif [ $type == "docker" ]; then
-                    inf "Pass"
-                fi
+            done
+        else
+            env_dir="$BASE_DIR/envs/$ENV"
+            if [ -f $env_dir/terraform.tf ]; then
+                inf "Destroy infrastructure with terraform"
             fi
-        done
-    else
-        if [ $COMMAND == "create" ]; then
-            inf "Create infrastructure for $ENV environment"
-
-            # Discover if we are using terraform aws/terraform scaleway/local docker/local vagrant/local hybrid
-            # Discover if we are using images
-
-            # if terraform (aws/scaleway)
-            #   run terraform plan & apply if yes
-        elif [ $COMMAND == "run" ]; then
-            inf "Run infrastructure for $ENV environment"
-
-        elif [ $COMMAND == "halt" ]; then
-            inf "Halt infrastructure for $ENV environment"
-
-        elif [ $COMMAND == "destroy" ]; then
-            inf "Destroy infrastructure for $ENV environment"
-
-            # Discover if we are using terraform aws/terraform scaleway/local docker/local vagrant
-            # Discover if we are using images
-
-            # if terraform (aws/scaleway)
-            #   run terraform destroy & apply if yes
-        elif [ $COMMAND == "provision" ]; then
-            inf "Provision to $ENV environment"
-
-        elif [ $COMMAND == "deploy" ]; then
-            inf "Deploy to $ENV environment"
-
-            # Discover if we are using builds or just reprovisioning
-
-            # if builds
-            #   spin up resource with new build (create), divert traffic to it, teardown old instance (destroy)
-
-            # if reporivsioning
-            #   run playbook against resource
         fi
+
+    elif [ $COMMAND == "run" ]; then
+        env_dir="$BASE_DIR/envs/$ENV"
+
+        if [ $ENV == 'local' ]; then
+            for service_name in $SERVICES;
+            do
+                service_dir="$WORKSPACE_DIR/$service_name"
+
+                if [ -f $service_dir/Vagrantfile ]; then
+                    (cd $service_dir && vagrant up)
+
+                elif [ -f $service_dir/Dockerfile ]; then
+                    # since we are not using compose we need to get ips from config here
+                    image_name="docker-$service_name"
+                    image_tag=$DEFAULT_VERSION
+
+                    if [[ "$(docker build -q $image_name:$image_tag 2> /dev/null)" == "" ]]; then
+                        (cd $service_dir && docker build -t $image_name:$image_tag .)
+                    fi
+                    (cd $service_dir && ./docker_run.sh $image_name:$image_tag)
+                fi
+            done
+        else
+            if [ -f $env_dir/terraform.tf ]; then
+                inf "Destroy infrastructure with terraform"
+            fi
+        fi
+
+    elif [ $COMMAND == "halt" ]; then
+        if [ $ENV == 'local' ]; then
+            for service_name in $SERVICES;
+            do
+                service_dir="$WORKSPACE_DIR/$service_name"
+
+                if [ -f $service_dir/Vagrantfile ]; then
+                    (cd $service_dir && vagrant halt)
+
+                elif [ -f $service_dir/Dockerfile ]; then
+                    image_name="docker-$service_name"
+                    image_tag=$DEFAULT_VERSION
+
+                    (cd $service_dir && docker stop $(docker ps -q --filter ancestor=$image_name:$image_tag ))
+                fi
+            done
+        else
+            env_dir="$BASE_DIR/envs/$ENV"
+            if [ -f $env_dir/terraform.tf ]; then
+                inf "Destroy infrastructure with terraform"
+            fi
+        fi
+
+    elif [ $COMMAND == "provision" ]; then
+        for service_name in $SERVICES;
+        do
+            inf "Provision $service_name for $ENV environment"
+            ansible_provision $ENV $service_name 'all'
+        done
+
+    elif [ $COMMAND == "deploy" ]; then
+        # Discover if we are using builds or just reprovisioning
+
+        # if builds
+        #   spin up resource with new build (create), divert traffic to it, teardown old instance (destroy)
+
+        # if reporivsioning
+        #   run playbook against resource
+        for service_name in $SERVICES;
+        do
+            inf "Deploy $service_name for $ENV environment"
+            ansible_provision $ENV $service_name 'deploy'
+        done
+
+    elif [ $COMMAND == "build" ]; then
+        inf "Building image with packer"
+
+    # Run only against datastore resources
+    # Get playbooks tasks by using tags which will do backing up
+    elif [ $COMMAND == "backup" ]; then
+        inf "Backup datastore for $ENV environment"
+
+    elif [ $COMMAND == "test" ]; then
+        inf "Run test suite"
     fi
 
 }

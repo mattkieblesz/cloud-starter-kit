@@ -2,6 +2,7 @@
 /conf/vpass
 /envs/*/store
 /envs/*/inventory
+/envs/*/ansible.cfg
 /roles/vendor
 /workspace
 *.retry

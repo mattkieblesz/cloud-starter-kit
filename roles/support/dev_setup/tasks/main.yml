@@ -36,13 +36,23 @@
   with_items: '{{ services }}'
   when: service.type == 'docker'
 
-- name: Copy ansible.cfg for each service
+- name: Create docker_run.sh script for running docker containers
   vars:
     service: '{{ item }}'
   template:
-    src: 'ansible.cfg.j2'
-    dest: '{{ workspace_dir }}/{{ item.name }}/ansible.cfg'
+    src: 'docker_run.sh.j2'
+    dest: '{{ workspace_dir }}/{{ service.name }}/docker_run.sh'
+    mode: 0755
   with_items: '{{ services }}'
+  when: service.type == 'docker'
+
+# - name: Copy ansible.cfg for each service
+#   vars:
+#     service: '{{ item }}'
+#   template:
+#     src: 'ansible.cfg.j2'
+#     dest: '{{ workspace_dir }}/{{ item.name }}/ansible.cfg'
+#   with_items: '{{ services }}'
 
 - name: Create hosts file locally
   become: yes
@@ -64,6 +74,12 @@
     src: 'inventory.j2'
     dest: '{{ base_dir }}/envs/local/inventory'
   delegate_to: localhost
+
+- name: Create ansible.cfg
+  become: yes
+  template:
+    src: 'ansible.cfg.j2'
+    dest: '{{ base_dir }}/envs/local/ansible.cfg'
 
 - name: Check if docker network is present
   command: docker network ls --filter name={{ docker.network_name }} -q

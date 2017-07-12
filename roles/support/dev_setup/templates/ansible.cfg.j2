@@ -1,10 +1,5 @@
 # {{ ansible_managed }}
 [defaults]
-{% if service.type == 'docker' %}
-ansible_connection=local
-{% else %}
-ansible_connection=local
-{% endif %}
 ansible_managed = DO NOT EDIT! Managed by Ansible
 roles_path = {{ base_dir }}/roles/support:{{ base_dir }}/roles/vendor:{{ base_dir }}/roles/services
 vault_password_file = ~/vpass
