@@ -14,7 +14,7 @@ configure:  # configure credentials
 	./scripts/configure.sh
 
 dev_setup:  # creates and runs local environment machines
-	ANSIBLE_CONFIG=conf/ansible.cfg ansible-playbook plays/dev_setup.yml
+	ANSIBLE_CONFIG=conf/ansible.cfg ansible-playbook envs/local/dev_setup.yml
 
 setup: install update-roles configure dev_setup
 

@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
 	config.vm.network :forwarded_port, guest: {{ port.guest }}, host: {{ port.host if port.host is defined else port.guest }}, auto_correct: true
 	{% endfor -%}
 	config.vm.network :private_network, ip: "{{ service.ip }}"
-	config.hostsupdater.aliases = [ '{{ service.url }}' ]  # modifies /etc/hosts on vagrant up/halt/stop/destroy
+	# config.hostsupdater.aliases = [ '{{ service.url }}' ]  # modifies /etc/hosts on vagrant up/halt/stop/destroy
 	# config.vm.network :private_network, type: "dhcp"
 
 	{% if service.repo is defined -%}

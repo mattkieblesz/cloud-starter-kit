@@ -87,7 +87,7 @@ main() {
                     if [[ "$(docker build -q $image_name:$image_tag 2> /dev/null)" == "" ]]; then
                         (cd $service_dir && docker build -t $image_name:$image_tag .)
                     fi
-                    (cd $service_dir && docker run -p 53022:22 --net cloud-starter-kit --ip 192.168.20.10 -d -i -t $image_name:$image_tag)
+                    (cd $service_dir && docker run -p 22 --net cloud-starter-kit --ip 192.168.20.10 -d -i -t $image_name:$image_tag)
                 fi
             elif [ $COMMAND == "halt" ]; then
                 if [ $type == "vagrant" ]; then

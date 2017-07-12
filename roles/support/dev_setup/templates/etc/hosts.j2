@@ -9,5 +9,5 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
 {% for service in services %}
-{{ service.ip }} local-{{ service.name }}.{{ local_url }}
+{{ service.ip }} {{ service.url }}
 {% endfor %}

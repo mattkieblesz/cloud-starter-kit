@@ -79,7 +79,7 @@ main() {
 
     inf "--> Installing core requirements"
     apt-get update
-    apt-get install build-essential python-dev python-pip python3-pip libssl-dev
+    apt-get install build-essential python-dev python-pip python3-pip libssl-dev sshpass
 
     inf "--> Installing Terraform"
     install_binary "$DOWNLOAD_DIR/terraform.zip" $TERRAFORM_DOWNLOAD_URL

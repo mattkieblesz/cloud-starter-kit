@@ -8,4 +8,14 @@
 {% for service in services %}
 [{{ service.name }}]
 {{ service.url }}
+
+[{{ service.name }}:vars]
+{% if service.type == 'vagrant' -%}
+ansible_user=vagrant
+ansible_ssh_pass=vagrant
+{% else -%}
+ansible_user=root
+ansible_ssh_pass=root
+{% endif %}
+
 {% endfor %}
