@@ -1,7 +1,7 @@
 ---
 
 - name: Build webapp service
-  hosts: services
+  hosts: all
   become: yes
 
   vars_files:

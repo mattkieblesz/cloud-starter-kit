@@ -2,7 +2,11 @@
 
 readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 readonly BASE_DIR=$( cd $SCRIPT_DIR/.. && pwd )
+
+readonly SECRETS_DIR="$BASE_DIR/conf/secrets"
 readonly WORKSPACE_DIR=$BASE_DIR/workspace
+
+readonly STORE_BUCKET_NAME=$( cd $BASE_DIR && basename $(pwd) )
 
 source "$SCRIPT_DIR/utils.sh"
 
@@ -11,7 +15,20 @@ OPTIONS="${@:2}"
 DEFAULT_SERVICE="all"
 DEFAULT_ENV="local"
 DEFAULT_STORE="local"  # local/s3
-DEFAULT_VERSION="$( git rev-parse HEAD )"  # <tag-name> or <commit-hash>
+
+get_service_version() {
+    service_dir="$WORKSPACE_DIR/$1"
+    if [ -d "$service_dir/.git" ]; then
+        git_dir="$service_dir"
+    else
+        git_dir="."
+    fi
+
+    # current latest tag for the service with stripped v prefix
+    # TODO: add checking release branch and get only from that major version
+    version=$(cd $git_dir && git tag -l --sort=v:refname "v*" | tail -1  | cut -c 2-)
+    echo $version
+}
 
 parse_options() {
     # getopt doesn't know what empty string means! use substring matching instead
@@ -20,7 +37,6 @@ parse_options() {
         case $option in
             --env=*) ENV="${option#*=}" && [ -z "$ENV" ] && ENV=$DEFAULT_ENV;;
             --store=*) STORE="${option#*=}" && [ -z "$STORE" ] && STORE=$DEFAULT_STORE;;
-            --version=*) VERSION="${option#*=}" && [ -z "$VERSION" ] && VERSION=$DEFAULT_VERSION;;
             --service=*) SERVICE="${option#*=}" && [ -z "$SERVICE" ] && SERVICE=$DEFAULT_SERVICE;;
             (*) break;;
         esac
@@ -37,7 +53,7 @@ ansible_provision() {
     env=$1
     service_name=$2
     tag=$3
-    config_file=$BASE_DIR/envs/$env/ansible.cfg
+    config_file=$SECRETS_DIR/ansible.cfg
     inventory_file=$BASE_DIR/envs/$env/inventory
     playbook_file=$BASE_DIR/plays/$service_name.yml
 
@@ -69,7 +85,7 @@ main() {
 
                 elif [ -f $service_dir/Dockerfile ]; then
                     image_name="docker-$service_name"
-                    image_tag=$DEFAULT_VERSION
+                    image_tag=$(get_service_version $service_name)
 
                     (cd $service_dir && docker build -t $image_name:$image_tag .)
                 fi
@@ -100,7 +116,7 @@ main() {
 
                 elif [ -f $service_dir/Dockerfile ]; then
                     image_name="docker-$service_name"
-                    image_tag=$DEFAULT_VERSION
+                    image_tag=$(get_service_version $service_name)
 
                     (cd $service_dir && docker stop $(docker ps -q --filter ancestor=$image_name:$image_tag ))
                     (cd $service_dir && docker rmi $image_name:$image_tag)
@@ -127,7 +143,7 @@ main() {
                 elif [ -f $service_dir/Dockerfile ]; then
                     # since we are not using compose we need to get ips from config here
                     image_name="docker-$service_name"
-                    image_tag=$DEFAULT_VERSION
+                    image_tag=$(get_service_version $service_name)
 
                     if [[ "$(docker build -q $image_name:$image_tag 2> /dev/null)" == "" ]]; then
                         (cd $service_dir && docker build -t $image_name:$image_tag .)
@@ -152,7 +168,7 @@ main() {
 
                 elif [ -f $service_dir/Dockerfile ]; then
                     image_name="docker-$service_name"
-                    image_tag=$DEFAULT_VERSION
+                    image_tag=$(get_service_version $service_name)
 
                     (cd $service_dir && docker stop $(docker ps -q --filter ancestor=$image_name:$image_tag ))
                 fi
@@ -186,13 +202,43 @@ main() {
         done
 
     elif [ $COMMAND == "build" ]; then
-        inf "Building image with packer"
+        for service_name in $SERVICES;
+        do
+            inf "Build $service_name image"
+            # get latest <git tag> from workspace repo or git tag from this cloud repo
+            # increment build using script and save output in service_version variable
+            #
+            version=$(get_service_version $service_name)
+            if [ -z "$version" ]; then
+                version="0.0.0.0"
+            else
+                version=$(./scripts/increment_version.sh $version)
+            fi
 
-    # Run only against datastore resources
-    # Get playbooks tasks by using tags which will do backing up
+            service_version="v$version"
+            region=$(grep "^region=" $SECRETS_DIR/aws-config | cut -d= -f2)
+
+            region_var="region=$region"
+            service_name_var="service_name=$service_name"
+            service_version_var="service_version=$service_version"
+            bucket_name_var="bucket_name=$STORE_BUCKET_NAME"
+            base_dir_var="base_dir=$BASE_DIR"
+            account_id_var="account_id=$(aws sts get-caller-identity --output text --query 'Account')"
+
+            packer build -var-file=$SECRETS_DIR/credentials.json \
+                         -var $region_var \
+                         -var $service_name_var \
+                         -var $service_version_var \
+                         -var $bucket_name_var \
+                         -var $base_dir_var \
+                         -var $account_id_var \
+                         $SCRIPT_DIR/templates/packer-amazon-ebs.json
+        done
+
     elif [ $COMMAND == "backup" ]; then
-        inf "Backup datastore for $ENV environment"
-
+        # Run only against datastore resources
+        # Get playbooks tasks by using tags which will do backing up
+        inf "Run  backup"
     elif [ $COMMAND == "test" ]; then
         inf "Run test suite"
     fi

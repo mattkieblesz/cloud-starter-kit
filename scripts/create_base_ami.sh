@@ -93,12 +93,12 @@ EOL
     }
 ]
 EOL
-    /usr/local/bin/aws ec2 import-image --license-type BYOL --disk-containers file:///tmp/containers.json --platform Linux
+    /usr/local/bin/aws ec2 import-image --description=$DESCRIPTION --license-type BYOL --disk-containers file:///tmp/containers.json --platform Linux
     rm /tmp/containers.json
 
     /usr/local/bin/aws ec2 describe-import-image-tasks
     warn "--> Now wait until import process will be finished"
-
+    # /usr/local/bin/aws ec2 describe-import-image-tasks
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main

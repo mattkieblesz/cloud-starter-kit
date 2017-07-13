@@ -23,7 +23,7 @@ setup: install update-roles configure dev_setup
 # MANAGEMENT #
 ##############
 create:  # create infrastructure as code
-	./scripts/manage.sh create --service=$(SERVICE) --env=$(ENV) --version=$(VERSION)
+	./scripts/manage.sh create --service=$(SERVICE) --env=$(ENV)
 
 destroy:  # destroy infrastructure as code
 	./scripts/manage.sh destroy --service=$(SERVICE) --env=$(ENV)
@@ -40,11 +40,11 @@ provision:  # provision to already created infrastructure
 deploy:  # deploy code using prebuild image/running provision command
 	./scripts/manage.sh deploy --service=$(SERVICE) --env=$(ENV)
 
-build:  # build images
-	./scripts/manage.sh build --service=$(SERVICE) --env=$(ENV)
-
 backup:  # backup data
 	./scripts/manage.sh backup --service=$(SERVICE) --env=$(ENV)
+
+build:  # build images
+	./scripts/manage.sh build --service=$(SERVICE)
 
 test:  # run test suite
 	echo "Test"

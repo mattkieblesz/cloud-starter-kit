@@ -75,11 +75,11 @@
     dest: '{{ base_dir }}/envs/local/inventory'
   delegate_to: localhost
 
-- name: Create ansible.cfg
-  become: yes
-  template:
-    src: 'ansible.cfg.j2'
-    dest: '{{ base_dir }}/envs/local/ansible.cfg'
+# - name: Create ansible.cfg
+#   become: yes
+#   template:
+#     src: 'ansible.cfg.j2'
+#     dest: '{{ base_dir }}/envs/local/ansible.cfg'
 
 - name: Check if docker network is present
   command: docker network ls --filter name={{ docker.network_name }} -q

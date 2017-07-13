@@ -4,13 +4,15 @@ readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 readonly INSTALL_DIR="/usr/local/bin"
 readonly DOWNLOAD_DIR="/tmp"
 
-readonly TERRAFORM_VERSION="0.9.10"
+readonly TERRAFORM_VERSION="0.9.11"
 readonly TERRAFORM_DOWNLOAD_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
 readonly PACKER_VERSION="1.0.2"
 readonly PACKER_DOWNLOAD_URL="https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
-readonly VAGRANT_VERSION="1.9.6"
+readonly VAGRANT_VERSION="1.9.7"
 readonly VAGRANT_DOWNLOAD_URL="https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb"
 readonly DOCKER_DOWLOAD_URL="https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_17.05.0~ce-0~ubuntu-xenial_amd64.deb"
+readonly ANSIBLE_VERSION="2.3.1"
+readonly AWSCLI_VERSION="1.11.114"
 
 source "$SCRIPT_DIR/utils.sh"
 
@@ -88,11 +90,11 @@ main() {
     install_binary "$DOWNLOAD_DIR/packer.zip" $PACKER_DOWNLOAD_URL
 
     inf "--> Installing Ansible"
-    pip install ansible==2.3.1  # use python2.7 since ansible doesn't support 3 yet
+    pip install ansible==$ANSIBLE_VERSION  # use python2.7 since ansible doesn't support 3 yet
 
     inf "--> Installing awscli"
     # ignore six if installed https://github.com/aws/aws-cli/issues/1522#issuecomment-159007931
-    pip install awscli==1.11.114 --upgrade --ignore-installed six
+    pip install awscli==$AWSCLI_VERSION --upgrade --ignore-installed six
 
     inf "--> Installing Docker"
     # https://docs.docker.com/engine/installation/linux/ubuntu/#install-from-a-package

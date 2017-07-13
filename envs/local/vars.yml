@@ -5,12 +5,12 @@ docker:
 services:
   # - name: api
   #   url: local-webapp.example.com
+  #   repo: git@gitlab.com:mattkieblesz/mkitdevelopment.git  # if specified repo will be cloned to workspace dir
   #   ip: 192.168.10.13
   #   ports:
   #   - guest_port: 80
   #     host_port: 8080
   #   image: ubuntu:14.04 (for docker) or ubuntu/trusty64 (for vagrant)
-  #   sync_workspace: webapp  # tells which already existing folder in workspace should be synced
   #   type: vagrant  # what type of virtualization should be used - vagrant or docker
 
   - name: webapp
@@ -18,9 +18,6 @@ services:
     ip: 192.168.10.10
     url: webapp.app.internal
     image: ubuntu/trusty64
-    packer:
-      iso_url: 'http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso'
-      iso_checksum: 'dde07d37647a1d2d9247e33f14e91acb10445a97578384896b4e1d985f754cc1'
     ports:
     - guest: 80
       # host: 8080

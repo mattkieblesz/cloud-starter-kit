@@ -1,9 +1,6 @@
-/conf/aws-config
-/conf/credentials.json
-/conf/vpass
+/conf/secrets
 /envs/*/store
 /envs/*/inventory
-/envs/*/ansible.cfg
 /roles/vendor
 /tmp
 /workspace
