@@ -14,20 +14,16 @@ COMMAND=$1
 OPTIONS="${@:2}"
 DEFAULT_SERVICE="all"
 DEFAULT_ENV="local"
-DEFAULT_STORE="local"  # local/s3
-DEFAULT_BUILD_TYPE="amazon-instance"
+DEFAULT_STORE="local"
+BUILD_TAG=false
 
 get_service_version() {
-    service_dir="$WORKSPACE_DIR/$1"
-    if [ -d "$service_dir/.git" ]; then
-        git_dir="$service_dir"
-    else
-        git_dir="."
-    fi
+    # All services which have it's own repo are being tagged
+    # Other services versions are kept within this repo
 
     # current latest tag for the service with stripped v prefix
     # TODO: add checking release branch and get only from that major version
-    version=$(cd $git_dir && git tag -l --sort=v:refname "v*" | tail -1  | cut -c 2-)
+    version=$(cd $WORKSPACE_DIR/$service_name && git tag -l --sort=v:refname "v*" | tail -1  | cut -c 2-)
     echo $version
 }
 
@@ -40,6 +36,7 @@ parse_options() {
             --store=*) STORE="${option#*=}" && [ -z "$STORE" ] && STORE=$DEFAULT_STORE;;
             --service=*) SERVICE="${option#*=}" && [ -z "$SERVICE" ] && SERVICE=$DEFAULT_SERVICE;;
             --build-type=*) BUILD_TYPE="${option#*=}" && [ -z "$BUILD_TYPE" ] && BUILD_TYPE=$DEFAULT_BUILD_TYPE;;
+            --build-tag) BUILD_TAG=true;;
             (*) break;;
         esac
     done
@@ -204,48 +201,57 @@ main() {
         done
 
     elif [ $COMMAND == "build" ]; then
-        for service_name in $SERVICES;
-        do
-            inf "Build $service_name image"
-            # get latest <git tag> from workspace repo or git tag from this cloud repo
-            # increment build using script and save output in service_version variable
-            #
-            version=$(get_service_version $service_name)
-            if [ -z "$version" ]; then
-                version="0.0.0.0"
-            else
-                version=$(./scripts/increment_version.sh $version)
-            fi
+        if [[ ${#SERVICES[@]} == 0 ]]; then
+            error "You must specify only one service instead of: $SERVICES\n"
+            exit 0
+        fi
+        service_name=${SERVICES[0]}
 
-            service_version="v$version"
+        inf "Build $service_name image"
 
-            if [[ $BUILD_TYPE == "amazon-instance" || $BUILD_TYPE == "amazon-ebs" ]]; then
-                # FIXME: for eu-west-2 (london) amazon-instance builder fails since upload to s3 to this
-                # region is not supported (consider using awscli instead of aws-ami-tools)
+        # get latest <git tag> from workspace repo or git tag from this cloud repo
+        # increment build using script and save output in service_version variable
+        version=$(get_service_version $service_name)
+        if [ -z "$version" ]; then
+            version="0.0.0.0"
+        else
+            version=$(./scripts/increment_version.sh -b $version)
+        fi
+        service_version="v$version"
 
-                # region=$(grep "^region=" $SECRETS_DIR/aws-config | cut -d= -f2)
-                region=$(aws s3api get-bucket-location --output text --bucket $STORE_BUCKET_NAME)
+        if [[ $BUILD_TYPE == "amazon-instance" || $BUILD_TYPE == "amazon-ebs" ]]; then
+            # FIXME: for eu-west-2 (london) amazon-instance builder fails since upload to s3 to this
+            # region is not supported (consider using awscli instead of aws-ami-tools)
 
-                region_var="region=$region"
-                service_name_var="service_name=$service_name"
-                service_version_var="service_version=$service_version"
-                bucket_name_var="bucket_name=$STORE_BUCKET_NAME"
-                base_dir_var="base_dir=$BASE_DIR"
-                account_id_var="account_id=$(aws sts get-caller-identity --output text --query 'Account')"
+            # region=$(grep "^region=" $SECRETS_DIR/aws-config | cut -d= -f2)
+            region=$(aws s3api get-bucket-location --output text --bucket $STORE_BUCKET_NAME)
 
-                packer build -var-file=$SECRETS_DIR/credentials.json \
-                            -var $region_var \
-                            -var $service_name_var \
-                            -var $service_version_var \
-                            -var $bucket_name_var \
-                            -var $base_dir_var \
-                            -var $account_id_var \
-                            -only $BUILD_TYPE \
-                            $SCRIPT_DIR/templates/packer-amazon.json
-            else
-                warn "Build type $BUILD_TYPE is not supported"
-            fi
-        done
+            region_var="region=$region"
+            service_name_var="service_name=$service_name"
+            service_version_var="service_version=$service_version"
+            bucket_name_var="bucket_name=$STORE_BUCKET_NAME"
+            base_dir_var="base_dir=$BASE_DIR"
+            account_id_var="account_id=$(aws sts get-caller-identity --output text --query 'Account')"
+
+            packer build -var-file=$SECRETS_DIR/credentials.json \
+                        -var $region_var \
+                        -var $service_name_var \
+                        -var $service_version_var \
+                        -var $bucket_name_var \
+                        -var $base_dir_var \
+                        -var $account_id_var \
+                        -only $BUILD_TYPE \
+                        $SCRIPT_DIR/templates/packer-amazon.json
+        else
+            error "Build type $BUILD_TYPE is not supported\n"
+            exit 0
+        fi
+
+        # tag service if it has repo
+        if [[ $BUILD_TAG == true ]]; then
+            echo 'build'
+            (cd $WORKSPACE_DIR/$service_name && git tag $service_version && git push origin $service_version)
+        fi
 
     elif [ $COMMAND == "backup" ]; then
         # Run only against datastore resources

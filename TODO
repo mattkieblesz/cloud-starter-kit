@@ -1,8 +1,4 @@
-- create build command
-    - upload/publish aws ami in s3 (doesn't work currently)
-    - after success create tag locally and push to remote
-
-- allow to create local envs using images in local store by <user>/<docker|vagrant>:<tag|latest> (print out to pull image from remote if not present)
+- allow to create local envs using images in local store by <user>/<docker|vagrant>:<tag> (print out to pull image from remote if not present)
 
 - create automated tests using kitchenci for local machine building and checking if play was deployed correctly
 - finish up test command

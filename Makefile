@@ -46,5 +46,8 @@ backup:  # backup data
 build:  # build images
 	./scripts/manage.sh build --service=$(SERVICE) --build-type=$(BUILD_TYPE)
 
+build_with_tag:  # build images
+	./scripts/manage.sh build --service=$(SERVICE) --build-type=$(BUILD_TYPE) --build-tag
+
 test:  # run test suite
 	echo "Test"
