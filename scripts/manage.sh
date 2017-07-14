@@ -15,6 +15,7 @@ OPTIONS="${@:2}"
 DEFAULT_SERVICE="all"
 DEFAULT_ENV="local"
 DEFAULT_STORE="local"  # local/s3
+DEFAULT_BUILD_TYPE="amazon-instance"
 
 get_service_version() {
     service_dir="$WORKSPACE_DIR/$1"
@@ -38,6 +39,7 @@ parse_options() {
             --env=*) ENV="${option#*=}" && [ -z "$ENV" ] && ENV=$DEFAULT_ENV;;
             --store=*) STORE="${option#*=}" && [ -z "$STORE" ] && STORE=$DEFAULT_STORE;;
             --service=*) SERVICE="${option#*=}" && [ -z "$SERVICE" ] && SERVICE=$DEFAULT_SERVICE;;
+            --build-type=*) BUILD_TYPE="${option#*=}" && [ -z "$BUILD_TYPE" ] && BUILD_TYPE=$DEFAULT_BUILD_TYPE;;
             (*) break;;
         esac
     done
@@ -216,23 +218,33 @@ main() {
             fi
 
             service_version="v$version"
-            region=$(grep "^region=" $SECRETS_DIR/aws-config | cut -d= -f2)
 
-            region_var="region=$region"
-            service_name_var="service_name=$service_name"
-            service_version_var="service_version=$service_version"
-            bucket_name_var="bucket_name=$STORE_BUCKET_NAME"
-            base_dir_var="base_dir=$BASE_DIR"
-            account_id_var="account_id=$(aws sts get-caller-identity --output text --query 'Account')"
+            if [[ $BUILD_TYPE == "amazon-instance" || $BUILD_TYPE == "amazon-ebs" ]]; then
+                # FIXME: for eu-west-2 (london) amazon-instance builder fails since upload to s3 to this
+                # region is not supported (consider using awscli instead of aws-ami-tools)
 
-            packer build -var-file=$SECRETS_DIR/credentials.json \
-                         -var $region_var \
-                         -var $service_name_var \
-                         -var $service_version_var \
-                         -var $bucket_name_var \
-                         -var $base_dir_var \
-                         -var $account_id_var \
-                         $SCRIPT_DIR/templates/packer-amazon-ebs.json
+                # region=$(grep "^region=" $SECRETS_DIR/aws-config | cut -d= -f2)
+                region=$(aws s3api get-bucket-location --output text --bucket $STORE_BUCKET_NAME)
+
+                region_var="region=$region"
+                service_name_var="service_name=$service_name"
+                service_version_var="service_version=$service_version"
+                bucket_name_var="bucket_name=$STORE_BUCKET_NAME"
+                base_dir_var="base_dir=$BASE_DIR"
+                account_id_var="account_id=$(aws sts get-caller-identity --output text --query 'Account')"
+
+                packer build -var-file=$SECRETS_DIR/credentials.json \
+                            -var $region_var \
+                            -var $service_name_var \
+                            -var $service_version_var \
+                            -var $bucket_name_var \
+                            -var $base_dir_var \
+                            -var $account_id_var \
+                            -only $BUILD_TYPE \
+                            $SCRIPT_DIR/templates/packer-amazon.json
+            else
+                warn "Build type $BUILD_TYPE is not supported"
+            fi
         done
 
     elif [ $COMMAND == "backup" ]; then

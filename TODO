@@ -1,17 +1,6 @@
 - create build command
-    - create packer template which will build AWS ami using AWS ec2 builder
-    - upload/publish aws ami in s3
-    - finish up build command
-
-- create push command
-    - upload/publish vagrant box to s3
-    - upload/publish docker image to s3
-    - upload backup store to s3
-
-- create pull command
-    - pull vagrant box from s3
-    - pull docker image from s3
-    - pull backup store from s3
+    - upload/publish aws ami in s3 (doesn't work currently)
+    - after success create tag locally and push to remote
 
 - allow to create local envs using images in local store by <user>/<docker|vagrant>:<tag|latest> (print out to pull image from remote if not present)
 

@@ -44,7 +44,7 @@ backup:  # backup data
 	./scripts/manage.sh backup --service=$(SERVICE) --env=$(ENV)
 
 build:  # build images
-	./scripts/manage.sh build --service=$(SERVICE)
+	./scripts/manage.sh build --service=$(SERVICE) --build-type=$(BUILD_TYPE)
 
 test:  # run test suite
 	echo "Test"

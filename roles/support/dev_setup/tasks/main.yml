@@ -54,6 +54,14 @@
 #     dest: '{{ workspace_dir }}/{{ item.name }}/ansible.cfg'
 #   with_items: '{{ services }}'
 
+- name: Get hostname output
+  shell: hostname
+  register: hostname_output
+
+- name: Add as Fact per for each hosts
+  set_fact:
+      hostname: "{{ hostname_output.stdout }}"
+
 - name: Create hosts file locally
   become: yes
   template:
