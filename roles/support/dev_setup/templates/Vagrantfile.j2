@@ -4,7 +4,8 @@
 require 'fileutils'
 
 Vagrant.configure(2) do |config|
-	config.vm.box = "{{ service.image }}"
+	config.vm.box = "{{ service.name }}"
+	config.vm.box_url = "file://{{ base_dir }}/envs/local/store/images/vagrant/latest.box"
 	config.vm.box_check_update = false
 
 	config.ssh.forward_agent = true

@@ -43,6 +43,9 @@ deploy:  # deploy code using prebuild image/running provision command
 backup:  # backup data
 	./scripts/manage.sh backup --service=$(SERVICE) --env=$(ENV)
 
+push:  # push local boxes to remote
+	./scripts/manage.sh push --service=$(SERVICE)
+
 build:  # build images
 	./scripts/manage.sh build --service=$(SERVICE) --build-type=$(BUILD_TYPE)
 

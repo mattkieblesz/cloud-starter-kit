@@ -70,8 +70,10 @@ EOL
         mkdir -p $store_dir/backups
     done
 
-    inf "--> Sync local stores to s3"
-    aws s3 cp $store_dir s3://$STORE_BUCKET_NAME/$LOCAL_ENV --recursive
+    inf "--> Create local environments store dirs"
+    mkdir -p $BASE_DIR/envs/local/store/images/vagrant \
+             $BASE_DIR/envs/local/store/images/docker \
+             $BASE_DIR/envs/local/store/images/amazon
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main
