@@ -1,26 +1,99 @@
-- allow to create local envs using images in local store by <user>/<docker|vagrant>:<tag> (print out to pull image from remote if not present)
+- transform cloud-starter-kit to `cloud` program
+    - commands/
+    - lib/ under which put all commands which will use different tools like provisioners as classes
+    - scripts/
+    - repo/
+        - commands/
+            install.py (installs `cloud` program first and then calls its install command)
+            deploy.py (calling provision command)
+            backup.py (calling provision command)
+        - envs/
+            - dev/
+                - secrets/
+                    vault-pass
+                    ovh-config
+                inventory
+                terraform.tf
+            - stg/
+                - secrets/
+                    vault-pass
+                    ovh-config
+                vars.yml
+                secrets.yml
+                inventory
+                terraform.tf
+            - prd/
+                - secrets/
+                    vault-pass
+                    aws-config
+                    credentials.json
+                    aws_privkey.pem
+                    aws_pubkey.pem
+                inventory
+                terraform.tf
+            - prf/
+                - secrets/
+                    vault-pass
+                    aws-config
+                    credentials.json
+                    aws_privkey.pem
+                    aws_pubkey.pem
+                inventory
+                terraform.tf
+            - mgt/
+                - secrets/
+                    vault-pass
+                    ovh-config
+                inventory
+                cloudformation.json
+            - lcl/ (it is in ansible/local/roles/local/dev_setup)
+                inventory
+        - ansible/
+            - files/
+            - roles/
+                - services/
+                - common/ (common roles used by services)
+                - local/ (roles executed only on local computer)
+                - vendor/
+            - plays/ (service plays)
+            - vars/ (global vars)
+            ansible.cfg
+        - puppet/
+        - chef/
+        - saltstack/
+        - manage.py
+    - .kitchen.yml (for vagrant testing)
+    - setup.py
+- create abstract classes in lib/:
+    - provisioner (ansible/puppet/chef/saltstack)
+    - infrastructure manager (terraform/cloudformation/local)
+    - vm manager (vagrant/docker)
+    - infrastructure provider (aws/ovh/azure/local)
+    - environment
+    - local config file (with secret)
+    - service (with git)
+    - store (remote or local by using infra provider)
+    - cloud store
+    - environment store
+    - image builder (packer/local-aws-builder)
+- commands in `cloud` program
+    - cloud init (creates config in current directory for cloud from template)
+    - cloud start --config=<config-path but optional> (creates initial repo)
+- commands available in cloud repo
+    - install (install deps - provisioner/infra manager/infra provider/)
+        - prompt for all configs and automatically configure
+        - update all vendor dependencies like roles
+    - infra (--environment)
+        - create (starts automatically)
+        - destroy
+        - start
+        - stop
+    - provision (--tag, --service, --environment)
+    - build (--service, --build-type, --push-local, --push-remote)
+    - test (--service, --type=<integration|unit|acceptance|behavioural>)
+- commands available in workspace/<service-name> dir
+    - same as with cloud repo, but with --service flag already filled
 
-- create automated tests using kitchenci for local machine building and checking if play was deployed correctly
-- finish up test command
-
-- create db and web IaC at once from terraform templates using created AMIs with packer and save terraform state to local/remote store
-- finish up create command
-
-- destroy db and web Iac at once using terraform templates
-- finish up destroy command
-
-- create infrasctructure and provision using ansible
-- create bare infrasctructure and provision all using ansible
-- provision specific tag using ansible
-- finish up provision command
-
-- backup envs database by dumping it, compressing it and saving it to local/remote store
-- finish up backup command
-
-- create django-starter-kit template which uses cloud-starter-kit as devops tool
-- create www.mkitdevelopment.com website base using django-starter-kit
-- modify cloud-starter-kit to be using django-starter-kit
-- test if it works
 
 
 
@@ -47,20 +120,6 @@
 
 
 
-
-
-
-
-
-
-
-
-Starter-kit UI pages:
-- requirements:
-    - build deploy
-    - code deploy
-    - best coding practices
-    - all services tested
 - functionalities:
     - haproxy (mkitdevelopment.com is point to micro aws instance with haproxy in it)
     - tinder with scraped products using celery workers and rabitmq with websockets and jquery and react native view for android and iOS (scraping job log on displayed on the page)
@@ -157,10 +216,9 @@ Starter-kit UI pages:
     - chef
     - Saltstack
 - testing (test log with websockets):
-    - integration (services endpoints with unittests)
+    - integration
     - acceptance (payments)
     - unittests (pytest and unittest)
-    - infrasctructure (with kitchenci possibly)
 - libs (simplest hello world app):
     - flask
     - django

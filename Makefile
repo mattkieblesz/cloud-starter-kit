@@ -35,7 +35,7 @@ halt:  # stop running infrastructure
 	./scripts/manage.sh halt --service=$(SERVICE) --env=$(ENV)
 
 provision:  # provision to already created infrastructure
-	./scripts/manage.sh provision --service=$(SERVICE) --env=$(ENV)
+	./scripts/manage.sh provision --service=$(SERVICE) --env=$(ENV) --provision-tag=$(PROVISION_TAG)
 
 deploy:  # deploy code using prebuild image/running provision command
 	./scripts/manage.sh deploy --service=$(SERVICE) --env=$(ENV)
@@ -53,4 +53,4 @@ build_with_tag:  # build images
 	./scripts/manage.sh build --service=$(SERVICE) --build-type=$(BUILD_TYPE) --build-tag
 
 test:  # run test suite
-	echo "Test"
+	./scripts/manage.sh test --service=$(SERVICE) --test-type=$(TEST_TYPE) --concurency=$(CONCURENCY)

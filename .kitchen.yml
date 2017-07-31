@@ -1,0 +1,57 @@
+---
+
+driver:
+  associate_public_ip: true
+  instance_type: t2.small
+  name: ec2
+  region: eu-west-1
+  tags:
+    Environment: "bld"
+    Name: "kitchen"
+
+transport:
+  connection_timeout: 120
+  forward_agent: true
+  max_ssh_sessions: 7
+  username: ubuntu
+
+provisioner:
+  additional_copy_path:
+    - roles/services
+    - roles/support
+    - roles/vendor
+  additional_copy_role_path:
+    - roles/services
+    - roles/support
+    - roles/vendor
+  ansible_sudo: false
+  ansible_verbose: true
+  ansible_verbosity: 1
+  extra_vars:
+    hosts: all
+    test_mode: yes
+  hosts: test-kitchen
+  name: ansible_playbook
+  # Ansible is already installed in our base image
+  # skip reinstall to save time
+  require_ansible_omnibus: false
+  require_ansible_source: false
+  require_ansible_repo: false
+  require_chef_for_busser: false
+  require_ruby_for_busser: true
+  roles_path: roles/services
+  sudo_command: "sudo -HE"
+  tags:
+    - build
+    - configure
+    - test
+
+platforms:
+  - name: ubuntu-14.04
+
+suites:
+  - name: database
+  - name: webapp
+
+verifier:
+  ruby_bindir: '/usr/bin'

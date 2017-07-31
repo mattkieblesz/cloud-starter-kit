@@ -16,3 +16,12 @@ dependencies:
   - role: ansible-postgresql
     postgresql_version: 9.6
     postgresql_ext_postgis_version: "2.3"
+    postgresql_databases:
+      - name: webapp
+        owner: webapp
+    postgresql_users:
+      - name: webapp
+        pass: pass
+    postgresql_user_privileges:
+      - name: webapp
+        db: webapp

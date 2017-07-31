@@ -13,6 +13,7 @@ readonly VAGRANT_DOWNLOAD_URL="https://releases.hashicorp.com/vagrant/${VAGRANT_
 readonly DOCKER_DOWLOAD_URL="https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_17.05.0~ce-0~ubuntu-xenial_amd64.deb"
 readonly ANSIBLE_VERSION="2.3.1"
 readonly AWSCLI_VERSION="1.11.114"
+readonly CHEFDK_DOWNLOAD_URL="https://packages.chef.io/files/stable/chefdk/2.0.28/ubuntu/16.04/chefdk_2.0.28-1_amd64.deb"
 
 source "$SCRIPT_DIR/utils.sh"
 
@@ -105,6 +106,11 @@ main() {
     # # https://docs.docker.com/engine/installation/linux/linux-postinstall/
     getent group docker || groupadd docker
     usermod -aG docker $USER
+
+    inf "--> Installing Chef DK"
+    install_deb "$DOWNLOAD_DIR/chefdk.deb" $CHEFDK_DOWNLOAD_URL
+    gem install kitchen-ansible
+    gem install kitchen-vagrant
 
     inf "--> Installing Vagrant"
     install_deb "$DOWNLOAD_DIR/vagrant.deb" $VAGRANT_DOWNLOAD_URL

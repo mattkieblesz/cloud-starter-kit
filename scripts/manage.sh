@@ -18,7 +18,10 @@ DEFAULT_ENV="local"
 DEFAULT_STORE="local"
 BUILD_TAG=false
 DEFAULT_BUILD_TYPE="amazon-ebs"
+DEFAULT_TEST_TYPE="vagrant"
+DEFAULT_CONCURENCY="1"
 BASE_VAGRANT_BOX_URL="https://app.vagrantup.com/ubuntu/boxes/trusty64/versions/20170619.0.0/providers/virtualbox.box"
+DEFAULT_PROVISION_TAG="all"
 
 get_service_version() {
     # All services which have it's own repo are being tagged
@@ -43,6 +46,9 @@ parse_options() {
             --store=*) STORE="${option#*=}" && [ -z "$STORE" ] && STORE=$DEFAULT_STORE;;
             --service=*) SERVICE="${option#*=}" && [ -z "$SERVICE" ] && SERVICE=$DEFAULT_SERVICE;;
             --build-type=*) BUILD_TYPE="${option#*=}" && [ -z "$BUILD_TYPE" ] && BUILD_TYPE=$DEFAULT_BUILD_TYPE;;
+            --test-type=*) TEST_TYPE="${option#*=}" && [ -z "$TEST_TYPE" ] && TEST_TYPE=$DEFAULT_TEST_TYPE;;
+            --concurency=*) CONCURENCY="${option#*=}" && [ -z "$CONCURENCY" ] && CONCURENCY=$DEFAULT_CONCURENCY;;
+            --provision-tag=*) PROVISION_TAG="${option#*=}" && [ -z "$PROVISION_TAG" ] && PROVISION_TAG=$DEFAULT_PROVISION_TAG;;
             --build-tag) BUILD_TAG=true;;
             (*) break;;
         esac
@@ -229,7 +235,7 @@ main() {
         for service_name in $SERVICES;
         do
             inf "Provision $service_name for $ENV environment"
-            ansible_provision $ENV $service_name 'all'
+            ansible_provision $ENV $service_name $PROVISION_TAG
         done
 
     elif [ $COMMAND == "deploy" ]; then
@@ -266,6 +272,7 @@ main() {
         if [[ $BUILD_TYPE == "amazon-instance" || $BUILD_TYPE == "amazon-ebs" ]]; then
             # FIXME: for eu-west-2 (london) amazon-instance builder fails since upload to s3 to this
             # region is not supported (consider using awscli instead of aws-ami-tools)
+            # TODO: local vagrant/docker with packer
 
             # region=$(grep "^region=" $SECRETS_DIR/aws-config | cut -d= -f2)
             region=$(aws s3api get-bucket-location --output text --bucket $STORE_BUCKET_NAME)
@@ -341,6 +348,8 @@ main() {
             if [ ! -f $LOCAL_STORE_DIR/$docker_image_path ]; then
                 inf "Commit container changes"
                 docker commit $(docker ps -q --filter ancestor=$service_name:latest) $service_name:$service_version
+                docker rmi $service_name:latest
+                docker tag $service_name:$service_version $service_name:latest
 
                 inf "Packaging the box to local store"
                 docker save -o $LOCAL_STORE_DIR/$docker_image_path $service_name:$service_version
@@ -363,7 +372,25 @@ main() {
         fi
 
     elif [ $COMMAND == "test" ]; then
-        inf "Run test suite"
+        if [[ ${#SERVICES[@]} == 0 ]]; then
+            suits="all"
+        else
+            suits=${SERVICES[0]}
+        fi
+
+        if [ $TEST_TYPE == 'vagrant' ]; then
+            inf "Run test suite using Vagrant"
+
+	        kitchen_file="$BASE_DIR/.kitchen.yml"
+	        local_kitchen_file="$BASE_DIR/.kitchen.vagrant.yml"
+
+		    KITCHEN_YAML=$kitchen_file KITCHEN_LOCAL_YAML=$local_kitchen_file kitchen test $suits -c $CONCURENCY
+		    KITCHEN_YAML=$kitchen_file KITCHEN_LOCAL_YAML=$local_kitchen_file kitchen destroy $suits
+
+
+        elif [ $TEST_TYPE == 'aws' ]; then
+            warn "Not available"
+        fi
 
     elif [ $COMMAND == "backup" ]; then
         # Run only against datastore resources

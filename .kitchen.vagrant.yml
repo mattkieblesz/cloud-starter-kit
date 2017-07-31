@@ -1,0 +1,22 @@
+---
+
+driver:
+  customize:
+    memory: 1024
+    natdnshostresolver1: "on"
+    natdnsproxy1: "on"
+    nictype1: "virtio"
+    nictype2: "virtio"
+  forward_agent: true
+  name: vagrant
+
+provisioner:
+  # Need to install Ansible since it won't be present in the ubuntu
+  # Vagrant image
+  ansible_version: 2.1.1.0
+  require_pip: true
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      box: ubuntu/trusty64
