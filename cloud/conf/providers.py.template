@@ -1,0 +1,12 @@
+# Put here all providers secrets
+
+AWS_PROFILES = {
+    'default': {
+        'id': '',
+        'key': '',
+        'region': 'eu-west-1',
+        'output': 'json'
+    }
+}
+AWS_USER_ID=''
+AWS_PRIVATE_KEY=''

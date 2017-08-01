@@ -1,7 +1,9 @@
-/conf/secrets
-/envs/*/store
-/envs/*/inventory
-/roles/vendor
-/tmp
+/cloud/ansible/roles/vendor
+/cloud/conf/providers.py
+/cloud/files/secrets
+/cloud/envs/*/store
+/cloud/envs/*/inventory
+
 /workspace
+
 *.retry
