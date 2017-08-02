@@ -94,6 +94,7 @@
         - stop
     - provision (--tag, --service, --environment)
     - build (--service, --build-type, --push-local, --push-remote)
+    - save ()
     - test (--service, --type=<integration|unit|acceptance|behavioural>)
 - commands available in workspace/<service-name> dir
     - same as with cloud repo, but with --service flag already filled

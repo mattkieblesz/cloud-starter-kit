@@ -8,5 +8,4 @@ AWS_PROFILES = {
         'output': 'json'
     }
 }
-AWS_USER_ID=''
-AWS_PRIVATE_KEY=''
+VAULT_PASS = ''

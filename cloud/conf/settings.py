@@ -1,7 +1,7 @@
 import os
 
 # all provider secrets
-from .providers import *  # NOQA
+from .local_settings import *  # NOQA
 
 
 PROJECT_NAME = 'mkitdevelopment-cloud'
@@ -13,10 +13,12 @@ SECRETS_DIR = os.path.join(PROJECT_ROOT, 'conf', 'secrets')
 # Components paths
 ENVS_DIR = os.path.join(PROJECT_ROOT, 'cloud', 'envs')
 ANSIBLE_DIR = os.path.join(PROJECT_ROOT, 'cloud', 'ansible')
-MACHINES_DIR = os.path.join(PROJECT_ROOT, 'workspace', 'machines')
-WORKSPACE_DIR = os.path.join(PROJECT_ROOT, 'workspace', 'repos')
-LOCAL_STORE_DIR = os.path.join(PROJECT_ROOT, 'workspace', 'store')
-TMP_DIR = os.path.join(PROJECT_ROOT, 'workspace', 'tmp')
+WORKSPACE_DIR = os.path.join(PROJECT_ROOT, 'workspace')
+
+MACHINES_DIR = os.path.join(WORKSPACE_DIR, 'machines')
+REPOS_DIR = os.path.join(WORKSPACE_DIR, 'repos')
+LOCAL_STORE_DIR = os.path.join(WORKSPACE_DIR, 'store')
+TMP_DIR = os.path.join(WORKSPACE_DIR, 'tmp')
 
 # Envs setup
 ENVS = {
