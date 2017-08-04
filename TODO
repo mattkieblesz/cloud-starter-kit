@@ -1,0 +1,69 @@
+- rewrite ansible dev setup script to python
+- create abstract classes in lib/:
+    - provisioner (ansible/puppet/chef/saltstack)
+    - infrastructure manager (terraform/cloudformation/local)
+    - vm manager (vagrant/docker)
+    - infrastructure provider (aws/ovh/azure/local)
+    - environment
+    - local config file (with secret)
+    - service (with git)
+    - store (remote or local by using infra provider)
+    - cloud store
+    - environment store
+    - image builder (packer/local-aws-builder)
+- commands in `cloud-starter-kit` program
+    - cloud init (creates config in current directory for cloud from template)
+    - cloud start --config=<config-path but optional> (creates initial repo)
+- commands available in cloud repo
+    - setup (install, configure and update roles)
+        - install (install deps - provisioner/infra manager/infra provider/)
+        - configure (prompt for all configs and automatically configure)
+        - update-roles (update all vendor dependencies like roles)
+        - development-setup (setup workspaces, local dns etc.)
+    - infra (--environment)
+        - create (starts automatically)
+        - destroy
+        - start
+        - stop
+    - provision (--tag, --service, --environment)
+    - build (--service, --build-type, --push-local, --push-remote)
+    - save ()
+    - test (--service, --type=<integration|unit|acceptance|behavioural>)
+- commands available in workspace/<service-name> dir
+    - same as with cloud repo, but with --service flag already filled
+
+
+- create mkitdevelopment-company:
+    - mkitdevelopment service (using wagtail cms)
+    - hello-world service (simple server using language package)
+        - python
+        - ruby
+        - scala
+        - go
+        - clojure
+        - javascript
+        - Erlang
+        - haskel
+        - Perl
+        - php
+        - java
+        - c
+        - c++
+        - c#
+        - lua
+        - Visual Basic .NET
+        - pascal
+        - Rust
+        - ASP.net
+    - frameworks service (hello world page served by framework)
+        - use one from each language https://en.wikipedia.org/wiki/Comparison_of_web_frameworks
+        - or this https://github.com/showcases/web-application-frameworks
+    - services:
+        - mgt: jenkins, gocd, elk, openstack, sentry, kubernetes, zookeeper, datadog, graphana, gitlab enterprise, kafka
+        - dev/stg/prd: hadoop, HBase, Spark, Hive, Cassandra, Oozie
+        - dev/stg/prd: helipoland (using django-starter-kit)
+        - dev/stg/prd: helipoland (using wordpress)
+        - solr
+        - RabbitMQ
+        - Tomcat
+        - Neo4j

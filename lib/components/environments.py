@@ -1,7 +1,7 @@
-from .base import Component
+from .base import BaseComponent
 
 
-class BaseEnvironment(Component):
+class BaseEnvironment(BaseComponent):
     def setup(self):
         pass
 
@@ -23,7 +23,8 @@ class BaseEnvironment(Component):
 
 
 class LocalEnvironment(BaseEnvironment):
-    pass
+    def create(self):
+        pass
 
 
 class RemoteEnvironment(BaseEnvironment):

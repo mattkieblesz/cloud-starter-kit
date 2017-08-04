@@ -1,5 +1,7 @@
 import click
 
+from lib.utils import run_script
+
 
 @click.group()
 def setup():
@@ -9,19 +11,4 @@ def setup():
 
 @setup.command()
 def install():
-    click.echo('install')
-
-
-@setup.command()
-def configure():
-    click.echo('configure')
-
-
-@setup.command()
-def update_roles():
-    click.echo('update roles')
-
-
-@setup.command()
-def development():
-    click.echo('setup development')
+    run_script('install.sh')

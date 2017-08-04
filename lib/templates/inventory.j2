@@ -1,0 +1,20 @@
+# {{ managed_message }}
+
+[machines:children]
+{% for machine in workspace_machines -%}
+{{ machine.name }}
+{% endfor %}
+
+{% for machine in workspace_machines -%}
+[{{ machine.name }}]
+{{ machine.url }}
+
+[{{ machine.name }}:vars]
+{% if machine.type == 'vagrant' -%}
+ansible_user=vagrant
+ansible_ssh_pass=vagrant
+{% else -%}
+ansible_user=root
+ansible_ssh_pass=root
+{% endif %}
+{% endfor %}

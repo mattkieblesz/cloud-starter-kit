@@ -1,0 +1,5 @@
+{% for src, version, name in requirements %}
+- src: {{ src }}
+  version: "{{ version }}"
+  name: {{ name }}
+{% endfor %}

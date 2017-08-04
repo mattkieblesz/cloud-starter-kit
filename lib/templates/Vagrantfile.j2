@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# {{ managed_message }}
+
+require 'fileutils'
+
+Vagrant.configure(2) do |config|
+	config.vm.box = "{{ name }}"
+	config.vm.box_url = "file://{{ local_store_dir }}/images/vagrant/latest.box"
+	config.vm.box_check_update = false
+
+	config.ssh.forward_agent = true
+
+	{% for port in ports -%}
+	config.vm.network :forwarded_port, guest: {{ port.guest }}, host: {{ port.host if port.host is defined else port.guest }}, auto_correct: true
+	{% endfor -%}
+	config.vm.network :private_network, ip: "{{ ip }}"
+
+	{% if repo_dir is defined -%}
+	config.vm.synced_folder {{ repo_dir }},
+		"/home/{{ name }}/code",
+		mount_options: ["dmode=777,fmode=777"]
+	{% endif -%}
+
+	config.vm.provider :virtualbox do |vb|
+		vb.customize ["modifyvm", :id, "--memory", 1024]
+		vb.customize ["modifyvm", :id, "--cpus", 1]
+		vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+		vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+	end
+end
