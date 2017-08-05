@@ -1,8 +1,8 @@
 # {{ managed_message }}
 [defaults]
 ansible_managed = DO NOT EDIT! Managed by Ansible
-roles_path = {{ base_dir }}/roles/support:{{ base_dir }}/roles/vendor:{{ base_dir }}/roles/services
-vault_password_file = ~/vpass
+roles_path = {{ ansible_dir }}/roles/support:{{ ansible_dir }}/roles/vendor:{{ ansible_dir }}/roles/services
+vault_password_file = {{ secrets_dir }}/vpass
 hash_behaviour = merge
 host_key_checking = False
 sudo_flags = -HE

@@ -1,5 +1,5 @@
-from .base import BaseTool
+from .base import VmManager
 
 
-class VagrantTool(BaseTool):
+class VagrantTool(VmManager):
     pass

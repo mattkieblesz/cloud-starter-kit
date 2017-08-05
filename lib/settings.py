@@ -47,7 +47,7 @@ ENVS = {
 }
 
 # All machines
-MACHINES = [
+SERVICES = [
     'webapp',
     'database'
 ]
@@ -61,6 +61,7 @@ WORKSPACE_REPOS = {
 WORKSPACE_MACHINES = [
     {
         'name': 'database',
+        'services': ['database'],
         'url': 'database.app.internal',
         'ip': '192.168.20.10',
         'image': 'rastasheep/ubuntu-sshd:14.04',
@@ -73,6 +74,7 @@ WORKSPACE_MACHINES = [
     },
     {
         'name': 'webapp',
+        'services': ['webapp'],
         'url': 'webapp.app.internal',
         'ip': '192.168.10.10',
         'image': 'ubuntu/trusty64',

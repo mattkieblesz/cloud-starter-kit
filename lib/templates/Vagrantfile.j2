@@ -1,8 +1,6 @@
 # -*- mode: ruby -*-
 # {{ managed_message }}
 
-require 'fileutils'
-
 Vagrant.configure(2) do |config|
 	config.vm.box = "{{ name }}"
 	config.vm.box_url = "file://{{ local_store_dir }}/images/vagrant/latest.box"
@@ -16,7 +14,8 @@ Vagrant.configure(2) do |config|
 	config.vm.network :private_network, ip: "{{ ip }}"
 
 	{% if repo_dir is defined -%}
-	config.vm.synced_folder {{ repo_dir }},
+	config.vm.synced_folder
+		"{{ repo_dir }}",
 		"/home/{{ name }}/code",
 		mount_options: ["dmode=777,fmode=777"]
 	{% endif -%}

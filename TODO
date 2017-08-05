@@ -1,4 +1,4 @@
-- rewrite ansible dev setup script to python
+- rewrite configure.sh script into python
 - create abstract classes in lib/:
     - provisioner (ansible/puppet/chef/saltstack)
     - infrastructure manager (terraform/cloudformation/local)
@@ -11,9 +11,6 @@
     - cloud store
     - environment store
     - image builder (packer/local-aws-builder)
-- commands in `cloud-starter-kit` program
-    - cloud init (creates config in current directory for cloud from template)
-    - cloud start --config=<config-path but optional> (creates initial repo)
 - commands available in cloud repo
     - setup (install, configure and update roles)
         - install (install deps - provisioner/infra manager/infra provider/)

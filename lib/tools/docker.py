@@ -1,5 +1,5 @@
-from .base import BaseTool
+from .base import VmManager
 
 
-class DockerTool(BaseTool):
+class DockerTool(VmManager):
     pass

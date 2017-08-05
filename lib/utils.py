@@ -60,9 +60,10 @@ def template(src, dest, template_vars=None, template_dir=None):
     extra_vars = {
         'project_name': s.PROJECT_NAME,
         'project_root': s.PROJECT_ROOT,
+        'secrets_dir': s.SECRETS_DIR,
         'local_store_dir': s.LOCAL_STORE_DIR,
         'workspace_machines': s.WORKSPACE_MACHINES,
-        'managed_message': s.MANAGED_MESSAGE
+        'managed_message': s.MANAGED_MESSAGE,
     }
     template_vars.update({
         k: v
