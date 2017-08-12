@@ -10,8 +10,8 @@ PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), os.pardi
 # Components paths
 ENVS_DIR = os.path.join(PROJECT_ROOT, 'cloud', 'envs')
 ANSIBLE_DIR = os.path.join(PROJECT_ROOT, 'cloud', 'ansible')
-SECRETS_DIR = os.path.join(PROJECT_ROOT, 'cloud', 'files', 'secrets')
 SCRIPTS_DIR = os.path.join(PROJECT_ROOT, 'lib', 'scripts')
+SECRETS_DIR = os.path.join(PROJECT_ROOT, 'secrets')
 
 WORKSPACE_DIR = os.path.join(PROJECT_ROOT, 'workspace')
 MACHINES_DIR = os.path.join(WORKSPACE_DIR, 'machines')
@@ -90,7 +90,7 @@ MANAGED_MESSAGE = 'Manged by %s setup scripts' % PROJECT_NAME
 DOCKER_LOCAL_NETWORK_SUBNET = '192.168.20.0/24'
 
 # Remote store setup
-REMOTE_STORE_BUCKET_NAME = 'something-unique-xales'
+REMOTE_STORE_BUCKET = 'something-unique-xales'
 
 # Ansible setup
 ANSIBLE_VENDOR_ROLES = [

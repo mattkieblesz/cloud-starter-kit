@@ -1,0 +1,7 @@
+{% for name, values in aws_profiles -%}
+[{{ name }}]
+aws_access_key_id={{ values["id"] }}
+aws_secret_access_key={{ values["key"] }}
+region={{ values["region"] }}
+output={{ values["output"] }}
+{% endfor %}
