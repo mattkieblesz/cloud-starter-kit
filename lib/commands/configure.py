@@ -42,6 +42,16 @@ def provider_access():
     with open(os.path.join(s.SECRETS_DIR, 'vault-pass'), 'w') as f:
         f.write(s.VAULT_PASS)
 
+    log.info('Create Packer credentials file for aws')
+    template(
+        'packer_credentials.json.j2',
+        os.path.join(s.SECRETS_DIR, 'packer_credentials.json'),
+        template_vars={
+            'id': s.AWS_PROFILES['default']['id'],
+            'key': s.AWS_PROFILES['default']['key']
+        }
+    )
+
 
 @configure.command()
 def remote_store():
@@ -98,13 +108,14 @@ def development():
             )
 
     log.info('Setup local networking')
-
-    hostname = bash('hostname')
+    tmp_hosts_file_path = os.path.join(s.TMP_DIR, 'hosts')
     template(
-        'etc/hosts.j2',
-        os.path.join('/', 'etc', 'hosts'),
-        template_vars={'hostname': hostname}
+        os.path.join('etc', 'hosts.j2'),
+        tmp_hosts_file_path,
+        template_vars={'hostname': bash('hostname')}
     )
+    bash('cp %s %s' % (tmp_hosts_file_path, os.path.join('/', 'etc', 'hosts')), sudo=True)
+
     for machine in s.WORKSPACE_MACHINES:
         bash('ssh-keygen -f "~/.ssh/known_hosts" -R %s' % machine['url'])
 

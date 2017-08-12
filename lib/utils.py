@@ -36,6 +36,7 @@ def cd(path):
 def bash(cmd, sudo=False, user=None):
     if sudo:
         cmd = 'sudo ' + cmd
+
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     output, error = process.communicate()
 
@@ -73,5 +74,5 @@ def template(src, dest, template_vars=None, template_dir=None):
 
     result = template.render(**template_vars)
 
-    with open(dest, "w") as f:
+    with open(dest, 'w') as f:
         f.write(result)

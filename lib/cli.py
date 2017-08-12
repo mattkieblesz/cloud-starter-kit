@@ -8,6 +8,12 @@ from lib.commands import build
 from lib.commands import infra
 
 
+# Initialize objects
+app = {
+    'envs': []
+}
+
+
 @click.group()
 def cli():
     '''Cloud command line tool.'''

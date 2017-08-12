@@ -1,4 +1,3 @@
-- configure in yml root folder which will be parsed by settings.py
 - create abstract classes in lib/:
     - provisioner (ansible/puppet/chef/saltstack)
     - infrastructure manager (terraform/cloudformation/local)

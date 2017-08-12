@@ -92,7 +92,25 @@ DOCKER_LOCAL_NETWORK_SUBNET = '192.168.20.0/24'
 # Remote store setup
 REMOTE_STORE_BUCKET = 'something-unique-xales'
 
-# Ansible setup
+# Tools setup
+TERRAFORM_VERSION = '0.10.0'
+TERRAFORM_DOWNLOAD_URL = 'https://releases.hashicorp.com/terraform/%(version)s/terraform_%(version)s_linux_amd64.zip' % {'version': TERRAFORM_VERSION}
+
+PACKER_VERSION = '1.0.4'
+PACKER_DOWNLOAD_URL = 'https://releases.hashicorp.com/packer/%(version)s/packer_%(version)s_linux_amd64.zip' % {'version': PACKER_VERSION}
+
+VAGRANT_VERSION = '1.9.7'
+VAGRANT_DOWNLOAD_URL = 'https://releases.hashicorp.com/vagrant/%(version)s/vagrant_%(version)s_x86_64.deb' % {'version': VAGRANT_VERSION}
+
+DOCKER_ENGINE_VERSION = '17.05.0'
+DOCKER_DOWLOAD_URL = 'https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_%(version)s~ce-0~ubuntu-xenial_amd64.deb' % {'version': DOCKER_ENGINE_VERSION}
+
+CHEFDK_VERSION = '2.1.11'
+CHEFDK_DOWNLOAD_URL = 'https://packages.chef.io/files/stable/chefdk/%(version)s/ubuntu/16.04/chefdk_%(version)s-1_amd64.deb' % {'version': CHEFDK_VERSION}
+
+AWSCLI_VERSION = '1.11.133'
+
+ANSIBLE_VERSION = '2.3.2'
 ANSIBLE_VENDOR_ROLES = [
     # (src, version, name)
     ('git+https://github.com/mkitdevelopment/ansible-users.git', 'v0.0.3', 'ansible-users'),
