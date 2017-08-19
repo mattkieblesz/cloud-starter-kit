@@ -1,11 +1,13 @@
-# Put here all providers secrets
+# Put here all secrets
 
 AWS_PROFILES = {
-    'default': {
+    'eu-west-2': {
         'id': '',
         'key': '',
         'region': 'eu-west-1',
         'output': 'json'
     }
 }
+AWS_PROFILES['default'] = AWS_PROFILES['eu-west-2']
+
 VAULT_PASS = ''

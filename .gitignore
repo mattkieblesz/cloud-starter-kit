@@ -1,8 +1,6 @@
-/cloud/ansible/roles/vendor
-/cloud/ansible/ansible.cfg
-/cloud/files/secrets
-/cloud/envs/*/store
-/cloud/envs/*/inventory
+/cloud/provisioners/ansible/roles/vendor
+/cloud/provisioners/ansible/ansible.cfg
+/cloud/providers/local
 /cloud.egg-info
 /lib/local_settings.py
 /secrets

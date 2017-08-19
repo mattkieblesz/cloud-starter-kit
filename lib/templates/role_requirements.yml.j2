@@ -1,5 +1,7 @@
 {% for src, version, name in requirements %}
 - src: {{ src }}
+  {% if version -%}
   version: "{{ version }}"
+  {% endif -%}
   name: {{ name }}
 {% endfor %}

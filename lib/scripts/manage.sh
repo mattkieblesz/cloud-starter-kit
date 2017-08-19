@@ -1,7 +1,7 @@
 #!/bin/bash
 
 readonly SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-readonly BASE_DIR=$( cd $SCRIPT_DIR/.. && pwd )
+readonly BASE_DIR=$( cd $SCRIPT_DIR/../.. && pwd )
 
 readonly SECRETS_DIR="$BASE_DIR/conf/secrets"
 readonly WORKSPACE_DIR=$BASE_DIR/workspace

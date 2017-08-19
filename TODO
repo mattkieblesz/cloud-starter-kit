@@ -1,65 +1,47 @@
-- create abstract classes in lib/:
+1. Create sphinx search service playbook.
+2. Create new webapp service not in this repo.
+- simple django app - just by using default startproject template provided by django:
+- django-sphinx with simple data populating command
+- Angular 2 for using this search service
+
+
+3. Deploy with Terraform best-practices without atlas.
+- change deployment to be done in eu-west-2 (by using variables)
+- make use of profiles
+- automate cert and key generation
+- initialize python classes properly
+    - provider (aws/ovh/azure)
+    - env
     - provisioner (ansible/puppet/chef/saltstack)
-    - infrastructure manager (terraform/cloudformation/local)
+    - infrastructure manager (terraform/cloudformation)
     - vm manager (vagrant/docker)
-    - infrastructure provider (aws/ovh/azure/local)
-    - environment
     - local config file (with secret)
     - service (with git)
     - store (remote or local by using infra provider)
     - cloud store
     - environment store
     - image builder (packer/local-aws-builder)
-- commands available in cloud repo
-    - setup (install, configure and update roles)
-        - install (install deps - provisioner/infra manager/infra provider/)
-        - configure (prompt for all configs and automatically configure)
-        - update-roles (update all vendor dependencies like roles)
-        - development-setup (setup workspaces, local dns etc.)
-    - infra (--environment)
-        - create (starts automatically)
+- if wanting to just create specific part of infra run terraform file as module with vars from specific directory
+4. Commands available in cloud repo (local docker/vagrant and aws with terraform and ansible/cloudformation)
+    - infrav (--environment)
+        - create
         - destroy
         - start
         - stop
     - provision (--tag, --service, --environment)
     - build (--service, --build-type, --push-local, --push-remote)
-    - save ()
+    - pull ()
     - test (--service, --type=<integration|unit|acceptance|behavioural>)
 - commands available in workspace/<service-name> dir
     - same as with cloud repo, but with --service flag already filled
-
-
 - create mkitdevelopment-company:
-    - mkitdevelopment service (using wagtail cms)
-    - hello-world service (simple server using language package)
-        - python
-        - ruby
-        - scala
-        - go
-        - clojure
-        - javascript
-        - Erlang
-        - haskel
-        - Perl
-        - php
-        - java
-        - c
-        - c++
-        - c#
-        - lua
-        - Visual Basic .NET
-        - pascal
-        - Rust
-        - ASP.net
+    - mkitdevelopment service (using wagtail cms with semantic-ui)
     - frameworks service (hello world page served by framework)
         - use one from each language https://en.wikipedia.org/wiki/Comparison_of_web_frameworks
         - or this https://github.com/showcases/web-application-frameworks
     - services:
-        - mgt: jenkins, gocd, elk, openstack, sentry, kubernetes, zookeeper, datadog, graphana, gitlab enterprise, kafka
-        - dev/stg/prd: hadoop, HBase, Spark, Hive, Cassandra, Oozie
-        - dev/stg/prd: helipoland (using django-starter-kit)
-        - dev/stg/prd: helipoland (using wordpress)
         - solr
         - RabbitMQ
         - Tomcat
         - Neo4j
+        - codecata pythone exercices

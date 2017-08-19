@@ -1,17 +1,10 @@
 import click
 
 from lib.commands import setup
-from lib.commands import configure
 from lib.commands import provision
 from lib.commands import test
 from lib.commands import build
 from lib.commands import infra
-
-
-# Initialize objects
-app = {
-    'envs': []
-}
 
 
 @click.group()
@@ -21,7 +14,6 @@ def cli():
 
 
 cli.add_command(setup.setup)
-cli.add_command(configure.configure)
 cli.add_command(provision.provision)
 cli.add_command(test.test)
 cli.add_command(infra.infra)

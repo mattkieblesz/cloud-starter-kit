@@ -18,11 +18,11 @@ transport:
 provisioner:
   additional_copy_path:
     - roles/services
-    - roles/support
+    - roles/common
     - roles/vendor
   additional_copy_role_path:
     - roles/services
-    - roles/support
+    - roles/common
     - roles/vendor
   ansible_sudo: false
   ansible_verbose: true

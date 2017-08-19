@@ -1,0 +1,28 @@
+---
+
+- name: Build database service
+  hosts: all
+  become: yes
+
+  vars:
+    sphinx_test: True
+    mysql_databases:
+      - name: test
+        collation: utf8_general_ci
+        encoding: utf8
+    mysql_users:
+      - name: test
+        host: 127.0.0.1
+        password: test
+        priv: '*.*:ALL'
+
+  vars_files:
+    - ../vars/services.yml
+
+  pre_tasks:
+    - name: Add newest mysql repo
+      apt_repository: repo='ppa:ondrej/mysql-5.7'
+
+  roles:
+    - ansible-mysql
+    - ansible-sphinx
