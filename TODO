@@ -1,11 +1,13 @@
-1. Create sphinx search service playbook.
-2. Create new webapp service not in this repo.
-- simple django app - just by using default startproject template provided by django:
-- django-sphinx with simple data populating command
-- Angular 2 for using this search service
+Timing:
+15:40 - 15:55 - Investigate: what will be needed when doing facthub
 
 
-3. Deploy with Terraform best-practices without atlas.
+Tasks:
+1. Instead of machines/<service> do:
+- machines/vagrant/<service>
+- machines/docker/docker-compose.yml with build commands
+- user can choose between provisioning local boxes using dockerfiles or ansible
+1. Deploy with Terraform best-practices without atlas.
 - change deployment to be done in eu-west-2 (by using variables)
 - make use of profiles
 - automate cert and key generation
